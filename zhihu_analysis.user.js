@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        zhihu analysis
 // @version     0.1
-// @description zhihu analysis
+// @description analyse zhihu users
 // @license     MIT
 // @author      sxlgkxk
 // @namespace   https://github.com/sxlgkxk
