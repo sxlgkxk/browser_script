@@ -1,16 +1,17 @@
 // ==UserScript==
-// @name         zhihu analysis
+// @name         read auto scroll
 // @include      https://www.zhihu.com/people/*
-// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/zhihu_analysis.user.js
-// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/zhihu_analysis.user.js
+// @include      http://readonlinefreebook.com/*
+// @include      https://readonlinefreebook.com/*
+// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
+// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
 // @version      0.1
-// @description  analysis zhihu
+// @description  auto scroll
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
 // @icon         http://sxlgkxk.github.io/im/avatar.jpg
 // @license      MIT
-// @require      https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
