@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name         read auto scroll
-// @include      https://www.zhihu.com/people/*
 // @include      http://readonlinefreebook.com/*
 // @include      https://readonlinefreebook.com/*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
@@ -17,80 +16,48 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-let content=''
-let itemlist=[]
-let body=null
-let app=null
-let internal=null
+// @include      https://www.zhihu.com/people/*
+// @require      file://D:\storage\repo\github\sxlgkxk\public\webapp\browser_script\zhihu_analysis.user.js
 
-
-// answerTest
-function answerTest(){
-	itemlist=document.querySelectorAll('a[data-za-detail-view-element_name="Title"]')
-
-	// answer ready
-	if (itemlist.length > 0){
-		for(let i=0;i<itemlist.length;i++){
-			content+='<li>'+itemlist[i].outerHTML+'</li>'
-		}
-		content+='</br>'
-		app.innerHTML=content
-
-		// into next page
-		document.querySelector('#ProfileMain > div.ProfileMain-header > ul > li:nth-child(9) > a').click()
-
-		// start next interval
-		clearInterval(interval)
-		interval=setInterval(followTest, 200)
-	}
-}
-
-// followTest
-function followTest(){
-	itemlist=document.querySelectorAll('.UserItem-title a[data-za-detail-view-element_name="User"]')
-
-	// answer ready
-	if (itemlist.length > 0){
-
-		content+=`<table style="width:100%">`
-
-		for(let i=0;i<itemlist.length;i++){
-			let user=itemlist[i].outerHTML
-			let desc=document.querySelector('#Profile-following > div:nth-child(2) > div:nth-child('+(i+1)+') > div > div > div.ContentItem-head > div > div > div.ztext')
-			if (desc) desc=desc.innerHTML
-			content+='<tr><td style="text-align: right; padding-right:20px">'+user+'</td><td>'+desc+'</td></tr>'
-		}
-		content+='</table>'
-		app.innerHTML=content
-
-		// into next page
-
-		// start next interval
-		clearInterval(interval)
-		// interval=setInterval(followTest, 200)
-	}
-}
+let is_move=(localStorage.getItem('is_move')=='true');
+let speed=1;
 
 (function() {
-	// into answer page
-	document.querySelector('#ProfileMain > div.ProfileMain-header > ul > li:nth-child(2) > a').click()
+	// move function
+	function move() {
+		if (is_move) {
+			if((window.innerHeight + window.scrollY) >= document.body.scrollHeight){
+				let next_dom=document.querySelector('body > div.mainContainer.clearfix > div.chapter-detail > div.container.full > div.control-group > a.chapter-direction.nextChapter')
+				if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
 
-	setTimeout(()=>{
-		// version
-		console.log("version5")
+				location.href=next_dom.href
+			}
 
-		// dom
-		body=document.querySelector('#ProfileHeader > div')
-		app=document.createElement('div')
-		body.before(app)
+			window.scrollBy(0, speed);
+			requestAnimationFrame(move);
+		}
+    }
+	move()
 
-		// style
-		app.style.lineHeight='2'
-		app.style.color='#c6c6c6'
-		app.style.backgroundColor='#333'
-		app.style.padding='20px'
+	// move button dom insert
+	body=document.querySelector('body')
+	move_button=document.createElement('button')
+	body.before(move_button)
 
-		interval=setInterval(answerTest, 200)
-
-	}, 4000)
+	// move button style
+	move_button.innerHTML='move'
+	move_button.style.fontWeight='bold'
+	move_button.style.color='#fff'
+	move_button.style.backgroundColor='#333'
+	move_button.style.position='fixed'
+	move_button.style.bottom='50px'
+	move_button.style.right='50px'
+	move_button.style.width='50px'
+	move_button.style.height='50px'
+	move_button.style.opacity=0.8
+	move_button.onclick=()=>{
+		is_move=!is_move;
+		localStorage.setItem('is_move', is_move);
+		move()
+	}
 })();
