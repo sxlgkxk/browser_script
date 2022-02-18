@@ -10,7 +10,6 @@
 // @author       sxlgkxk
 // @icon         http://sxlgkxk.github.io/im/avatar.jpg
 // @license      MIT
-// @require      https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
