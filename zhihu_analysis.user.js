@@ -22,7 +22,6 @@ let body=null
 let app=null
 let internal=null
 
-
 // answerTest
 function answerTest(){
 	itemlist=document.querySelectorAll('a[data-za-detail-view-element_name="Title"]')
@@ -70,26 +69,23 @@ function followTest(){
 	}
 }
 
-(function() {
+let wait_dom_interval=setInterval(()=>{
 	// into answer page
-	document.querySelector('#ProfileMain > div.ProfileMain-header > ul > li:nth-child(2) > a').click()
+	let answer_tab=document.querySelector('#ProfileMain > div.ProfileMain-header > ul > li:nth-child(2) > a')
+	if(!answer_tab)return
+	clearInterval(wait_dom_interval)
+	answer_tab.click()
 
-	setTimeout(()=>{
-		// version
-		console.log("version5")
+	// dom
+	body=document.querySelector('#ProfileHeader > div')
+	app=document.createElement('div')
+	body.before(app)
 
-		// dom
-		body=document.querySelector('#ProfileHeader > div')
-		app=document.createElement('div')
-		body.before(app)
+	// style
+	app.style.lineHeight='2'
+	app.style.color='#c6c6c6'
+	app.style.backgroundColor='#333'
+	app.style.padding='20px'
 
-		// style
-		app.style.lineHeight='2'
-		app.style.color='#c6c6c6'
-		app.style.backgroundColor='#333'
-		app.style.padding='20px'
-
-		interval=setInterval(answerTest, 200)
-
-	}, 4000)
-})();
+	interval=setInterval(answerTest, 200)
+}, 200)
