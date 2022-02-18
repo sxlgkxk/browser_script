@@ -16,6 +16,8 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
+(function(){
+
 let is_move=(localStorage.getItem('is_move')=='true');
 let speed=1;
 let entering_nextpage=false;
@@ -55,8 +57,11 @@ move_button.style.right='50px'
 move_button.style.width='50px'
 move_button.style.height='50px'
 move_button.style.opacity=0.8
+move_button.style.zIndex=1
 move_button.onclick=()=>{
 	is_move=!is_move;
 	localStorage.setItem('is_move', is_move);
 	move()
 }
+
+})();

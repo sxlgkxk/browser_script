@@ -16,6 +16,8 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
+(function(){
+
 // content_dom
 let content_dom=document.querySelector('#des_novel')
 if (!content_dom) content_dom=document.querySelector('div.chapterContent')
@@ -146,3 +148,5 @@ batch_ignore_btn.onclick=function(){
 		tr_dom.childNodes[1].classList.add("w-changed")
 	}
 }
+
+})();

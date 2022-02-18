@@ -15,6 +15,8 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
+(function(){
+
 let content=''
 let itemlist=[]
 let body=null
@@ -88,3 +90,5 @@ let wait_dom_interval=setInterval(()=>{
 
 	interval=setInterval(answerTest, 200)
 }, 200)
+
+})();
