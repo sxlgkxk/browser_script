@@ -31,7 +31,7 @@ words_dom.style.width='100%'
 words_dom.style.backgroundColor='#333'
 words_dom.style.lineHeight='2'
 words_dom.style.padding='20px'
-document.write(`<script src="https://unpkg.com/axios/dist/axios.min.js"></script>`)
+words_dom.innerHTML=`<script src="https://unpkg.com/axios/dist/axios.min.js"></script>`
 let normal_html=`<details open><summary id="normal_summary">normal words</summary>`
 	+`<button id="batch_ignore_btn" style="background-color:#444; color:#ddd ;border:0; margin-top:4px;margin-bottom:4px; margin-left:20px; padding-top:5px;padding-bottom:5px;">batch ignore</button>`
 	+`<table style='width: 100%'>`
