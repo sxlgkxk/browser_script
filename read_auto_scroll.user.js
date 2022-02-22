@@ -32,7 +32,8 @@ function move() {
 				setTimeout(()=>{
 					let next_dom=document.querySelector('body > div.mainContainer.clearfix > div.chapter-detail > div.container.full > div.control-group > a.chapter-direction.nextChapter')
 					if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
-					location.href=next_dom.href
+					if(location.href+'#'!=next_dom.href)
+						location.href=next_dom.href
 				}, 1000)
 			}
 		}
