@@ -140,6 +140,21 @@ for(button of document.querySelectorAll('.w-modify')){
 		}
 	}
 }
+for(button of document.querySelectorAll('.w-translate')){
+	button.onclick=function(){
+		word=this.getAttribute('word')
+		translate=localStorage.getItem("cache-"+word)
+		if(!translate){
+			// http call 
+			translate='hi'
+		}
+
+		if(translate){
+			let tr_dom=document.querySelector('#w-'+word)
+			tr_dom.childNodes[3].innerHTML='<li>hi</li>';
+		}
+	}
+}
 
 let batch_ignore_btn=document.querySelector('#batch_ignore_btn')
 batch_ignore_btn.onclick=function(){
