@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         ticktick_gtd
-// @include      *xiaoice-k8s-kibana.xiaoice.com*
+// @include      https://dida365.com/webapp/*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/ticktick_gtd.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/ticktick_gtd.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
@@ -15,33 +15,31 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-(function(){
+var scripts_dom = document.createElement('script');
+scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
+scripts_dom.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
-	let btn_dom=null
-	let wait_dom_interval=setInterval(() =>{
-		btn_dom=document.querySelector("#container-main > div.fixed.inset-0 > div > div.flex-1.w-full.overflow-hidden > div > div > div > div.flex.justify-between.items-center > span")
-		if(!btn_dom) return
+(function () {
+	let wait_dom_interval = setInterval(() => {
+		// let container_dom = document.querySelector("#container-main > div.fixed.inset-0 > div > div.flex-1.w-full.overflow-hidden > div > div > div > div.flex > div > div:nth-child(1)")
+		let container_dom = document.querySelector("#container-main > div.fixed.inset-0 > div > div.flex-1.w-full.overflow-hidden > div > div > div > div.flex")
+		if (!container_dom || !axios) return
 
 		clearInterval(wait_dom_interval)
-		btn_dom.click()
 
-		btn_dom.innerHTML +=`<style>
-			div.dropdown-menu.dropdown-menu-placement-bottomRightBoult{max-width:2000px !important;}
-		</style>`
+		// app_dom
+		let app_dom = document.createElement('div')
+		let app_html=""
+		container_dom.before(app_dom)
 
-		let list_dom=document.querySelector('body > div:nth-child(27) > div > div') // .cloneNode(true)
-
-		// list_dom.after
-		// replace_dom=document.createElement('div')
-		// list_dom.after(replace_dom)
-
-		// table_dom.before
-		let table_dom=document.querySelector("#container-main > div.fixed.inset-0 > div > div.flex-1.w-full.overflow-hidden > div > div > div > div.flex > div > div:nth-child(1)")
-		table_dom.before(list_dom)
-
-		list_dom.style.position="static"
-		list_dom.style.width="800px"
-
+		// axios
+		axios.get("https://api.dida365.com/api/v2/pomodoros/timeline",{ withCredentials: true })
+			.then((response) => {
+				for(day_data of response.data){
+					app_html+=`<li>`+day_data.startTime+`</li>`
+				}
+				app_dom.innerHTML = app_html
+			})
 	}, 200)
-
 })();
