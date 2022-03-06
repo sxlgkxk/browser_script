@@ -64,12 +64,20 @@ mark_button.style.right='50px'
 mark_button.onclick=()=>{
 	cur_percent=getScrollPercent()
 	localStorage.setItem("mark_"+location.href, cur_percent)
+	localStorage.setItem("read_latest_date", Math.round(new Date()))
 	localStorage.setItem("read_latest", location.href+"_"+cur_percent)
 	$("#read_mark_btn").classList.add("highlight")
 }
 
 // goto_latest_button
 goto_latest_button.innerHTML='latest'
+read_latest_date=localStorage.getItem("read_latest_date")
+if(read_latest_date){
+	read_latest_date=parseInt(read_latest_date)
+	now=Math.round(new Date())
+	date_html=" "+Math.round((now-read_latest_date)/1000/3600)+"h"
+	goto_latest_button.innerHTML+=date_html
+}
 goto_latest_button.id='goto_latest_btn'
 goto_latest_button.classList.add("float_btn")
 goto_latest_button.style.bottom='50px'
