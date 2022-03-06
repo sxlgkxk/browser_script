@@ -21,11 +21,15 @@
 let is_move=(localStorage.getItem('is_move')=='true');
 let speed=1;
 let entering_nextpage=false;
+let speed_cnt=0;
+let speed_factor=1
 
 // move function
 function move() {
 	if (is_move) {
-		window.scrollBy(0, speed);
+		speed_cnt=(speed_cnt+1)%speed_factor;
+		if(speed_cnt==0)
+			window.scrollBy(0, speed);
 		if((window.innerHeight + window.scrollY) +50>= document.body.scrollHeight){
 			if (!entering_nextpage){
 				entering_nextpage=true
