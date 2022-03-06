@@ -203,6 +203,12 @@ ignored_update_btn.onclick=function(){
 			let data = response.data;
 			content=data.files["ignored_words.json"].content
 			ignored_word_set=new Set(JSON.parse(content))
+
+			for(word of ignored_word_set){
+				word_desc=localStorage.getItem("w-"+word)
+				if(!word_desc)
+					localStorage.setItem("w-"+word, "#")
+			}
 		})
 		.then(()=>{
 			// merge
