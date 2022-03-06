@@ -192,7 +192,7 @@ ignored_update_btn.onclick=function(){
 	gist_token=localStorage.getItem('gist_token')
 	if(!gist_token){
 		gist_token=prompt('gist_token?')
-		localStorage.setItem('gist_token',token)
+		localStorage.setItem('gist_token',gist_token)
 	}
 
 	// pull
