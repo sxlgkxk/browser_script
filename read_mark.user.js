@@ -30,36 +30,73 @@ function getScrollPercent() {
     return ((h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100).toFixed(2);
 }
 
-// move button dom insert
+// buttons dom insert
 body=document.querySelector('body')
 mark_button=document.createElement('button')
 body.before(mark_button)
 
+goto_latest_button=document.createElement('button')
+body.before(goto_latest_button)
+
 // move button style
-mark_button.innerHTML='mark'
+mark_button.innerHTML=`<style>
+	.float_btn{
+		font-weight: bold;
+		color: #fff;
+		background-color: #333;
+		position: fixed;
+		width: 50px;
+		height: 50px;
+		opacity: 0.8;
+		z-index: 1;
+	}
+	.float_btn.highlight{
+		background-color: #8bdb81;
+	}
+</style`
+
+// mark_button
+mark_button.innerHTML+='mark'
 mark_button.id='read_mark_btn'
-mark_button.style.fontWeight='bold'
-mark_button.style.color='#fff'
-mark_button.style.backgroundColor='#333'
-mark_button.style.position='fixed'
+mark_button.classList.add("float_btn")
 mark_button.style.bottom='50px'
 mark_button.style.right='50px'
-mark_button.style.width='50px'
-mark_button.style.height='50px'
-mark_button.style.opacity=0.8
-mark_button.style.zIndex=1
 mark_button.onclick=()=>{
 	cur_percent=getScrollPercent()
 	localStorage.setItem("mark_"+location.href, cur_percent)
-	$("#read_mark_btn").style.backgroundColor='#8bdb81'
+	localStorage.setItem("read_latest", location.href+"_"+cur_percent)
+	$("#read_mark_btn").classList.add("highlight")
 }
 
+// goto_latest_button
+goto_latest_button.innerHTML='latest'
+goto_latest_button.id='goto_latest_btn'
+goto_latest_button.classList.add("float_btn")
+goto_latest_button.style.bottom='50px'
+goto_latest_button.style.right='100px'
+goto_latest_button.onclick=()=>{
+	data=localStorage.getItem("read_latest")
+	url=data.substring(0, data.lastIndexOf("_"))
+	percent=parseFloat(data.substring(data.lastIndexOf("_")+1))
+
+	localStorage.setItem("is_goto_recent", "true")
+	if(location.href!=url)
+		location.href=url
+	else{
+		document.documentElement["scrollTop"]=percent/100*document.documentElement["scrollHeight"]
+		localStorage.setItem("is_goto_recent", "")
+	}
+}
+if(localStorage.getItem("is_goto_recent")) 
+	$("#goto_latest_btn").click()
+
+// highlight while scrolling
 window.onscroll=()=>{
 	latest_percent=parseFloat(localStorage.getItem("mark_"+location.href))
-	if(Math.abs(latest_percent/100*document.documentElement["scrollHeight"]-document.documentElement["scrollTop"])<100){
-		$("#read_mark_btn").style.backgroundColor='#8bdb81'
+	if(Math.abs(latest_percent/100*document.documentElement["scrollHeight"]-document.documentElement["scrollTop"])<150){
+		$("#read_mark_btn").classList.add("highlight")
 	}else{
-		$("#read_mark_btn").style.backgroundColor='#333'
+		$("#read_mark_btn").classList.remove("highlight")
 	}
 }
 
