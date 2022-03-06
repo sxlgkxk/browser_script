@@ -16,6 +16,11 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
+var scripts_dom = document.createElement('script');
+scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
+scripts_dom.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+
 (function(){
 
 const $ = selector => document.querySelector(selector);
@@ -27,7 +32,7 @@ function getScrollPercent() {
         b = document.body,
         st = 'scrollTop',
         sh = 'scrollHeight';
-    return ((h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100).toFixed(2);
+    return ((h[st]||b[st]) / ((h[sh]||b[sh])) * 100).toFixed(2);
 }
 
 // buttons dom insert
@@ -50,9 +55,6 @@ mark_button.innerHTML=`<style>
 		opacity: 0.8;
 		z-index: 1;
 	}
-	.float_btn.highlight{
-		background-color: #8bdb81;
-	}
 </style`
 
 // mark_button
@@ -62,50 +64,67 @@ mark_button.classList.add("float_btn")
 mark_button.style.bottom='50px'
 mark_button.style.right='50px'
 mark_button.onclick=()=>{
-	cur_percent=getScrollPercent()
-	localStorage.setItem("mark_"+location.href, cur_percent)
-	localStorage.setItem("read_latest_date", Math.round(new Date()))
-	localStorage.setItem("read_latest", location.href+"_"+cur_percent)
-	$("#read_mark_btn").classList.add("highlight")
+	gist_token=localStorage.getItem('gist_token')
+	if(!gist_token){
+		gist_token=prompt('gist_token?')
+		localStorage.setItem('gist_token',gist_token)
+	}
+	
+	let push_text=JSON.stringify({
+		"percent": getScrollPercent(),
+		"url": location.href,
+		"date": Math.round(new Date())
+	})
+
+	let gist_id="00fd89bedaf51674bfdb7bdb38720749"
+	axios.patch("https://api.github.com/gists/"+gist_id
+			, {files:{"read_latest.json":{"content": push_text}}}
+			, {headers:{Authorization:"token "+gist_token}}
+		)
+		.then((response) => {
+			alert('mark success')
+		})
 }
 
 // goto_latest_button
 goto_latest_button.innerHTML='latest'
-read_latest_date=localStorage.getItem("read_latest_date")
-if(read_latest_date){
-	read_latest_date=parseInt(read_latest_date)
-	now=Math.round(new Date())
-	date_html=" "+Math.round((now-read_latest_date)/1000/3600)+"h"
-	goto_latest_button.innerHTML+=date_html
-}
 goto_latest_button.id='goto_latest_btn'
 goto_latest_button.classList.add("float_btn")
 goto_latest_button.style.bottom='50px'
 goto_latest_button.style.right='100px'
 goto_latest_button.onclick=()=>{
-	data=localStorage.getItem("read_latest")
-	url=data.substring(0, data.lastIndexOf("_"))
-	percent=parseFloat(data.substring(data.lastIndexOf("_")+1))
-
-	localStorage.setItem("is_goto_recent", "true")
-	if(location.href!=url)
-		location.href=url
-	else{
-		document.documentElement["scrollTop"]=percent/100*document.documentElement["scrollHeight"]
-		localStorage.setItem("is_goto_recent", "")
+	gist_token=localStorage.getItem('gist_token')
+	if(!gist_token){
+		gist_token=prompt('gist_token?')
+		localStorage.setItem('gist_token',gist_token)
 	}
-}
-if(localStorage.getItem("is_goto_recent")) 
-	$("#goto_latest_btn").click()
+	let gist_id="00fd89bedaf51674bfdb7bdb38720749"
+	axios.get("https://api.github.com/gists/"+gist_id)
+		.then((response) => {
+			let data = response.data;
+			content=JSON.parse(data.files["read_latest.json"].content)
+			url=content["url"]
+			percent=content["percent"]
+			read_latest_date=content["date"]
 
-// highlight while scrolling
-window.onscroll=()=>{
-	latest_percent=parseFloat(localStorage.getItem("mark_"+location.href))
-	if(Math.abs(latest_percent/100*document.documentElement["scrollHeight"]-document.documentElement["scrollTop"])<150){
-		$("#read_mark_btn").classList.add("highlight")
-	}else{
-		$("#read_mark_btn").classList.remove("highlight")
-	}
-}
+			localStorage.setItem("is_goto_recent", "true")
+			if(location.href!=url)
+				location.href=url
+			else{
+				document.documentElement["scrollTop"]=percent/100*document.documentElement["scrollHeight"]
+				localStorage.setItem("is_goto_recent", "")
 
+				now=Math.round(new Date())
+				date_html="latest "+Math.round((now-read_latest_date)/1000/3600)+"h"
+				goto_latest_button.innerHTML=date_html
+			}
+		})
+}
+if(localStorage.getItem("is_goto_recent")) {
+	let wait_dom_interval = setInterval(() => {
+		if (!axios) return
+		clearInterval(wait_dom_interval)
+		$("#goto_latest_btn").click()
+	}, 200)
+}
 })();
