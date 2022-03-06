@@ -14,17 +14,22 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
-// @require      https://unpkg.com/axios/dist/axios.min.js
 // ==/UserScript==
+
+var scripts_dom = document.createElement('script');
+scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
+scripts_dom.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
 (function(){
 
-// content_dom
+// readonlinefreebooks_novel_content_dom
 let content_dom=document.querySelector('#des_novel')
 if (!content_dom) content_dom=document.querySelector('div.chapterContent')
 
 /* -------------------------------- words_dom -------------------------------- */
 
+// words_dom: [normal, main, sub, ignore]
 let words_dom=document.createElement('div')
 content_dom.before(words_dom)
 words_dom.style.width='100%'
@@ -43,6 +48,7 @@ let ignore_html=`<details><summary id="ignored_summary">ignored words</summary>`
 
 /* -------------------------------- words extract -------------------------------- */
 
+// novel text -> words_set
 let content=content_dom.innerText
 let word_regx=/\w{3,}/g
 let words_set=new Set()
@@ -122,6 +128,7 @@ if(cnt_normal==0) document.querySelector('#batch_ignore_btn').style.display='non
 
 /* -------------------------------- edit event -------------------------------- */
 
+// edit comment
 for(button of document.querySelectorAll('.w-modify')){
 	button.onclick=function(){
 		word=this.getAttribute('word')
@@ -140,22 +147,30 @@ for(button of document.querySelectorAll('.w-modify')){
 		}
 	}
 }
+
+// translate button
 for(button of document.querySelectorAll('.w-translate')){
 	button.onclick=function(){
 		word=this.getAttribute('word')
-		translate=localStorage.getItem("cache-"+word)
-		if(!translate){
-			// http call 
-			translate='hi'
-		}
-
-		if(translate){
-			let tr_dom=document.querySelector('#w-'+word)
-			tr_dom.childNodes[3].innerHTML='<li>hi</li>';
-		}
+		translate='hi'
+		axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/"+word)
+			.then((response) => {
+				dictionaryHtml=''
+				console.log(response.data)
+				for (meaing of response.data[0]["meanings"]){
+					dictionaryHtml+=`<b style="color:#8bdb81">`+meaing["partOfSpeech"]+`</b>`
+					for (definition of meaing["definitions"]){
+						example=definition["example"]
+						dictionaryHtml+=`<li title="`+example+`">`+definition["definition"]+`</li>`
+					}
+				}
+				let tr_dom=document.querySelector('#w-'+word)
+				tr_dom.childNodes[3].innerHTML=dictionaryHtml;
+			})
 	}
 }
 
+// batch ignore button
 let batch_ignore_btn=document.querySelector('#batch_ignore_btn')
 batch_ignore_btn.onclick=function(){
 	let words=document.querySelectorAll('td.w-normal.w-normal-title')
@@ -171,6 +186,7 @@ batch_ignore_btn.onclick=function(){
 	}
 }
 
+// gist : ignored_update_btn
 let ignored_update_btn=document.querySelector('#ignored_update_btn')
 ignored_update_btn.onclick=function(){
 	gist_token=localStorage.getItem('gist_token')
