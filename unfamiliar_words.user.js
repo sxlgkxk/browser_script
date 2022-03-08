@@ -45,6 +45,10 @@ let sub_html=`<details><summary id="sub_summary">sub words</summary><table style
 let ignore_html=`<details><summary id="ignored_summary">ignored words</summary>`
 	+`<button id="ignored_update_btn" style="background-color:#444; color:#ddd ;border:0; margin-top:4px;margin-bottom:4px; margin-left:20px; padding-top:5px;padding-bottom:5px;">ignored words update</button>`
 	+`<table style='width: 100%'>`
+let search_html=`<input placeholder="search fuzzy here"></input>
+	<li><b><i>word</i></b> desc</li>
+	<li><b><i>word2</i></b> desc2</li>
+`
 
 /* -------------------------------- words extract -------------------------------- */
 
@@ -107,7 +111,7 @@ normal_html+='</table></details>'
 main_html+='</table></details>'
 sub_html+='</table></details>'
 ignore_html+='</table></details>'
-words_dom.innerHTML+=normal_html+main_html+sub_html+ignore_html+`
+words_dom.innerHTML+=normal_html+main_html+sub_html+ignore_html+search_html+`
 	<style>
 		td.w-main{color:#8bdb81;}
 		td.w-sub{color:#9ad0ec;}
