@@ -22,7 +22,8 @@ let is_move=(localStorage.getItem('is_move')=='true');
 let speed=1;
 let entering_nextpage=false;
 let speed_cnt=0;
-let speed_factor=1
+let speed_factor=localStorage.getItem('speed_factor');
+speed_factor=speed_factor?parseInt(speed_factor):1
 
 // move function
 function move() {
@@ -64,6 +65,11 @@ move_button.style.height='50px'
 move_button.style.opacity=0.8
 move_button.style.zIndex=1
 move_button.onclick=()=>{
+	if(document.documentElement["scrollTop"]<50){
+		new_speed_factor=prompt("speed factor?", speed_factor)
+		speed_factor=new_speed_factor?parseInt(new_speed_factor):speed_factor
+		localStorage.setItem("speed_factor", speed_factor)
+	}
 	is_move=!is_move;
 	localStorage.setItem('is_move', is_move);
 	move()
