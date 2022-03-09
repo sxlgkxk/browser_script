@@ -21,6 +21,11 @@ scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
 scripts_dom.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
+var scripts_dom = document.createElement('script');
+scripts_dom.src = 'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js';
+scripts_dom.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+
 (function(){
 
 // readonlinefreebooks_novel_content_dom
@@ -45,9 +50,10 @@ let sub_html=`<details><summary id="sub_summary">sub words</summary><table style
 let ignore_html=`<details><summary id="ignored_summary">ignored words</summary>`
 	+`<button id="ignored_update_btn" style="background-color:#444; color:#ddd ;border:0; margin-top:4px;margin-bottom:4px; margin-left:20px; padding-top:5px;padding-bottom:5px;">ignored words update</button>`
 	+`<table style='width: 100%'>`
-let search_html=`<input placeholder="search fuzzy here"></input>
-	<li><b><i>word</i></b> desc</li>
-	<li><b><i>word2</i></b> desc2</li>
+let search_html=`<div id="dictionary_panel">
+	<input placeholder="search fuzzy here" id="search_input" autocomplete="off"></input>
+	<div id="search_results"></div>
+</div>
 `
 
 /* -------------------------------- words extract -------------------------------- */
@@ -120,15 +126,102 @@ words_dom.innerHTML+=normal_html+main_html+sub_html+ignore_html+search_html+`
 		td.w-changed{color:#bdb2ff}
 		td.w-main-title, td.w-sub-title{font-weight:bold}
 		summary{color: #aaa;text-align: center;}
-		td{font-family: Arial !important;}
+		td, li, ol, ul, p, span{font-family: Arial !important;}
+		button.translateBtn{
+			background-color:#444; 
+			color:#666;
+			border:0; 
+			margin-top:4px;
+			margin-bottom:4px;
+			margin-left:4px;
+			margin-right:4px
+		}
+		ul, ol{padding-left: 50px;}
+		#dictionary_panel{
+			background-color: #232323;
+			left:0px;
+			top:0px;
+			right:0px;
+			padding: 10px;
+			position:fixed;
+			opacity:0.9;
+		}
 	</style>
 	<img src="https://picsum.photos/seed/`+location.href.replaceAll("/","")+`/400/300" style="margin-left:auto;margin-right:auto;display:block"></img>`
+
+// add words cnt info
 document.querySelector('#normal_summary').innerText+="("+cnt_normal+")"
 document.querySelector('#main_summary').innerText+="("+cnt_main+")"
 document.querySelector('#sub_summary').innerText+="("+cnt_sub+")"
 document.querySelector('#ignored_summary').innerText+="("+cnt_ignore+")"
-
 if(cnt_normal==0) document.querySelector('#batch_ignore_btn').style.display='none'
+
+/* -------------------------------- dictionary search -------------------------------- */
+
+let dictionarySet=new Set()
+for(i=0;i<localStorage.length;i++){
+	key=localStorage.key(i)
+	if (key.substr(0,2)=="w-"){
+		word=key.substring(2)
+		desc=localStorage.getItem(key)
+		dictionarySet.add(word)
+	}
+}
+
+let fuse=null
+function updateSearcher(){
+	fuse=new Fuse(Array.from(dictionarySet))
+}
+function search(word){return fuse.search(word)}
+wait_fuse_interval=setInterval(()=>{
+	if (!Fuse) return
+	clearInterval(wait_fuse_interval)
+	updateSearcher()
+}, 200)
+
+// dictionary panel
+
+// enter event
+search_input= document.querySelector("#search_input");
+search_input.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+		input_val=search_input.value
+		search_input.value=""
+		input_pair=input_val.split(":")
+
+		word=input_pair[0].trim()
+		dictionarySet.add(word)
+		if(input_pair.length==1){
+			localStorage.setItem('w-'+word, "#")
+			dictionarySet.add(word)
+			updateSearcher()
+			return
+		}
+		
+		desc=input_pair[1].trim()
+		localStorage.setItem('w-'+word, desc)
+		updateSearcher()
+    }
+});
+
+// input event
+search_input.addEventListener("input", function(event) {
+	input_val=search_input.value
+	results=search(input_val)
+	results_html=""
+	for(i=0;i<Math.min(results.length, 20);i++){
+		word=results[i].item
+		desc=localStorage.getItem('w-'+word)
+		results_html+=`<li>`+word+`<button class="translateBtn" word="`+word+`" onclick="dictionaryTranslate('`+word+`')">?</button> : <span id="dictionaryDesc_`+word+`">`+desc+`</span></li>`
+	}
+	document.querySelector('#search_results').innerHTML=results_html
+});
+
+// focus shortcut
+document.addEventListener("keydown", function(event) {
+	if (event.ctrlKey && event.altKey && event.key=="f")
+		search_input.focus()
+});
 
 /* -------------------------------- edit event -------------------------------- */
 
@@ -173,6 +266,22 @@ for(button of document.querySelectorAll('.w-translate')){
 			})
 	}
 }
+function dictionaryTranslate(word){
+	axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/"+word)
+		.then((response) => {
+			dictionaryHtml='<ul>'
+			for (meaing of response.data[0]["meanings"]){
+				dictionaryHtml+=`<b style="color:#8bdb81">`+meaing["partOfSpeech"]+`</b>`
+				for (definition of meaing["definitions"]){
+					example=definition["example"]
+					dictionaryHtml+=`<li title="`+example+`">`+definition["definition"]+`</li>`
+				}
+			}
+			dictionaryHtml+='</ul>'
+			document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
+		})
+}
+window.dictionaryTranslate = dictionaryTranslate
 
 // batch ignore button
 let batch_ignore_btn=document.querySelector('#batch_ignore_btn')
