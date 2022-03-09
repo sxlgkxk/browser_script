@@ -52,6 +52,7 @@ let ignore_html=`<details><summary id="ignored_summary">ignored words</summary>`
 	+`<table style='width: 100%'>`
 let search_html=`<div id="dictionary_panel">
 	<input placeholder="search fuzzy here" id="search_input" autocomplete="off"></input>
+	<button class="translateBtn" onclick="closeSearch()">X</button>
 	<div id="search_results"></div>
 </div>
 `
@@ -217,14 +218,19 @@ search_input.addEventListener("input", function(event) {
 	document.querySelector('#search_results').innerHTML=results_html
 });
 
+// close search
+function closeSearch() {
+	search_input.value=""
+	document.querySelector('#search_results').innerHTML=``
+}
+window.closeSearch=closeSearch
+
 // focus shortcut
 document.addEventListener("keydown", function(event) {
 	if (event.ctrlKey && event.altKey && event.key=="f")
 		search_input.focus()
-	else if(event.key=="Escape"){
-		search_input.value=""
-		document.querySelector('#search_results').innerHTML=``
-	}
+	else if(event.key=="Escape")
+		closeSearch()
 });
 
 /* -------------------------------- edit event -------------------------------- */
