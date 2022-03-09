@@ -52,7 +52,7 @@ let ignore_html=`<details><summary id="ignored_summary">ignored words</summary>`
 	+`<table style='width: 100%'>`
 let search_html=`<div id="dictionary_panel">
 	<input placeholder="search fuzzy here" id="search_input" autocomplete="off"></input>
-	<button class="translateBtn" onclick="closeSearch()">X</button>
+	<button class="translateBtn" onclick="document.closeSearch()">X</button>
 	<div id="search_results"></div>
 </div>
 `
@@ -213,7 +213,7 @@ search_input.addEventListener("input", function(event) {
 	for(i=0;i<Math.min(results.length, 20);i++){
 		word=results[i].item
 		desc=localStorage.getItem('w-'+word)
-		results_html+=`<li>`+word+`<button class="translateBtn" word="`+word+`" onclick="dictionaryTranslate('`+word+`')">?</button> : <span id="dictionaryDesc_`+word+`">`+desc+`</span></li>`
+		results_html+=`<li>`+word+`<button class="translateBtn" word="`+word+`" onclick="document.dictionaryTranslate('`+word+`')">?</button> : <span id="dictionaryDesc_`+word+`">`+desc+`</span></li>`
 	}
 	document.querySelector('#search_results').innerHTML=results_html
 });
@@ -223,7 +223,7 @@ function closeSearch() {
 	search_input.value=""
 	document.querySelector('#search_results').innerHTML=``
 }
-window.closeSearch=closeSearch
+document.closeSearch=closeSearch
 
 // focus shortcut
 document.addEventListener("keydown", function(event) {
@@ -291,7 +291,7 @@ function dictionaryTranslate(word){
 			document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
 		})
 }
-window.dictionaryTranslate = dictionaryTranslate
+document.dictionaryTranslate = dictionaryTranslate
 
 // batch ignore button
 let batch_ignore_btn=document.querySelector('#batch_ignore_btn')
