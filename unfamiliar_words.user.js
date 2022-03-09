@@ -221,6 +221,10 @@ search_input.addEventListener("input", function(event) {
 document.addEventListener("keydown", function(event) {
 	if (event.ctrlKey && event.altKey && event.key=="f")
 		search_input.focus()
+	else if(event.key=="Escape"){
+		search_input.value=""
+		document.querySelector('#search_results').innerHTML=``
+	}
 });
 
 /* -------------------------------- edit event -------------------------------- */
