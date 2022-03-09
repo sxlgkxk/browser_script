@@ -21,7 +21,7 @@ scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
 scripts_dom.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
-var scripts_dom = document.createElement('script');
+scripts_dom = document.createElement('script');
 scripts_dom.src = 'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js';
 scripts_dom.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(scripts_dom);
