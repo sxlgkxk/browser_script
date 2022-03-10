@@ -1,78 +1,97 @@
 // ==UserScript==
-// @name         read auto scroll
+// @name         page_note
 // @include      http://readonlinefreebook.com/*
 // @include      https://readonlinefreebook.com/*
-// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
-// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
+// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
+// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
 // @version      0.1
-// @description  auto scroll
+// @description  page note
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
 // @icon         http://sxlgkxk.github.io/im/avatar.jpg
 // @license      MIT
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @grant        GM_xmlhttpRequest
 // ==/UserScript==
+
+var scripts_dom = document.createElement('script');
+scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
+scripts_dom.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
 (function(){
 
-let is_move=(localStorage.getItem('is_move')=='true');
-let speed=1;
-let entering_nextpage=false;
-let speed_cnt=0;
-let speed_factor=localStorage.getItem('speed_factor');
-speed_factor=speed_factor?parseInt(speed_factor):1
-
-// move function
-function move() {
-	if (is_move) {
-		speed_cnt=(speed_cnt+1)%speed_factor;
-		if(speed_cnt==0)
-			window.scrollBy(0, speed);
-		if((window.innerHeight + window.scrollY) +50>= document.body.scrollHeight){
-			if (!entering_nextpage){
-				entering_nextpage=true
-				setTimeout(()=>{
-					let next_dom=document.querySelector('body > div.mainContainer.clearfix > div.chapter-detail > div.container.full > div.control-group > a.chapter-direction.nextChapter')
-					if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
-					if(location.href+'#'!=next_dom.href)
-						location.href=next_dom.href
-				}, 1000)
-			}
-		}
-		requestAnimationFrame(move);
-	}
-}
-move()
-
 // move button dom insert
 body=document.querySelector('body')
-move_button=document.createElement('button')
-body.before(move_button)
-
-// move button style
-move_button.innerHTML='note'
-move_button.style.fontWeight='bold'
-move_button.style.color='#fff'
-move_button.style.backgroundColor='#333'
-move_button.style.position='fixed'
-move_button.style.bottom='150px'
-move_button.style.right='50px'
-move_button.style.width='50px'
-move_button.style.height='50px'
-move_button.style.opacity=0.8
-move_button.style.zIndex=1
-move_button.onclick=()=>{
-	if(document.documentElement["scrollTop"]<50){
-		new_speed_factor=prompt("speed factor?", speed_factor)
-		speed_factor=new_speed_factor?parseInt(new_speed_factor):speed_factor
-		localStorage.setItem("speed_factor", speed_factor)
+note_button=document.createElement('div')
+body.before(note_button)
+note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
+<textarea class="notePanel" hidden></textarea>
+<style>
+	button.noteBtn {
+		font-weight: bold;
+		color: #fff;
+		background-color: #333;
+		position: fixed;
+		bottom: 150px;
+		right: 50px;
+		width: 50px;
+		height: 50px;
+		opacity: 0.8;
+		z-index: 1;
 	}
-	is_move=!is_move;
-	localStorage.setItem('is_move', is_move);
-	move()
+	textarea.notePanel{
+		font-weight: bold;
+		color: #fff;
+		background-color: #333;
+		position: fixed;
+		bottom: 200px;
+		right: 0px;
+		left: 0px;
+		top: 50px;
+		opacity: 0.9;
+		z-index: 1;
+		padding: 30px;
+	}
+</style>`
+
+// hide/show functions
+document.hidePanel=()=>{
+	panel=document.querySelector("textarea.notePanel");
+	if(!panel.hidden){
+		text=panel.value;
+		localStorage.setItem("note_"+location.href,text)
+		panel.hidden=true
+	}
 }
+document.showPanel=()=>{
+	panel=document.querySelector("textarea.notePanel");
+	if(panel.hidden){
+		text=localStorage.getItem("note_"+location.href)
+		panel.value=text;
+		panel.hidden=false
+	}
+}
+
+// note event
+document.toggleNotePanle=()=>{
+	if(panel.hidden)
+		document.showPanel()
+	else
+		document.hidePanel()
+}
+
+// focus shortcut
+document.addEventListener("keydown", function(event) {
+	panel=document.querySelector("textarea.notePanel");
+	if (event.ctrlKey && event.altKey && event.key=="e"){
+		document.showPanel()
+		panel.focus()
+	}else if(event.key=="Escape"){
+		document.hidePanel()
+		panel.blur()
+	}
+});
 
 })();
