@@ -76,6 +76,7 @@ document.showPanel=()=>{
 
 // note event
 document.toggleNotePanle=()=>{
+	panel=document.querySelector("textarea.notePanel");
 	if(panel.hidden)
 		document.showPanel()
 	else
