@@ -38,7 +38,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		width: 50px;
 		height: 50px;
 		opacity: 0.8;
-		z-index: 1;
+		z-index: 2;
 	}
 	textarea.notePanel{
 		font-weight: bold;
@@ -50,7 +50,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		left: 0px;
 		top: 50px;
 		opacity: 0.9;
-		z-index: 1;
+		z-index: 2;
 		padding: 30px;
 	}
 </style>`
