@@ -1,7 +1,6 @@
 // ==UserScript==
 // @name         page_note
-// @include      http://readonlinefreebook.com/*
-// @include      https://readonlinefreebook.com/*
+// @include      *
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
