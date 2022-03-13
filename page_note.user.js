@@ -68,6 +68,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		z-index: 3000;
 		padding: 30px;
 	}
+	[hidden] { display: none !important; }
 </style>`
 
 // hide/show functions
