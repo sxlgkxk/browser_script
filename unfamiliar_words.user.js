@@ -143,7 +143,9 @@ words_dom.innerHTML+=normal_html+main_html+sub_html+ignore_html+search_html+`
 			left:0px;
 			top:0px;
 			right:0px;
-			padding: 10px;
+			padding-left: 10px;
+			padding-bottom: 0px;
+			padding-top: 0px;
 			position:fixed;
 			opacity:0.9;
 		}

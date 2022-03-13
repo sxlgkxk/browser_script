@@ -27,6 +27,10 @@ note_button=document.createElement('div')
 body.before(note_button)
 note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
 <textarea class="notePanel" hidden></textarea>
+<div id="all_notes_panel" hidden>
+	<h1>note</h1>
+	<h1>note</h1>
+</div>
 <style>
 	button.noteBtn {
 		font-weight: bold;
@@ -39,6 +43,14 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		height: 50px;
 		opacity: 0.8;
 		z-index: 3000;
+	}
+	#all_notes_panel{
+		color: #fff;
+		background-color: #333;
+		padding-top: 42px;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-bottom: 10px;
 	}
 	textarea.notePanel{
 		font-weight: bold;
@@ -74,20 +86,52 @@ document.showPanel=()=>{
 }
 
 // note event
+
+document.toggleAllNotesPanel=()=>{
+	all_notes_panel=document.querySelector("#all_notes_panel");
+	if(all_notes_panel.hidden){
+		html=``
+		for(i=0;i<localStorage.length;i++){
+			key=localStorage.key(i)
+			if (key.substr(0,5)=="note_"){
+				url=new URL(key.substring(5))
+				note=localStorage.getItem(key)
+				if(!note)
+					continue
+				html+=`<a href="`+url.href+`" style="color: #8bdb81; font-weight: bold">`+url.pathname+`</a><pre>`+note+`</pre><hr>`
+			}
+		}
+		html+=`<h1>read note status</h1>`
+		all_notes_panel.innerHTML=html
+		all_notes_panel.hidden=false
+	}else{
+		all_notes_panel.hidden=true
+	}
+}
 document.toggleNotePanle=()=>{
-	panel=document.querySelector("textarea.notePanel");
-	if(panel.hidden)
-		document.showPanel()
-	else
-		document.hidePanel()
+	// all_notes_panel
+	if(document.documentElement["scrollTop"]<50){
+		document.toggleAllNotesPanel()
+	}else{
+		// notePanel
+		note_panel=document.querySelector("textarea.notePanel");
+		if(note_panel.hidden)
+			document.showPanel()
+		else
+			document.hidePanel()
+	}
 }
 
 // focus shortcut
 document.addEventListener("keydown", function(event) {
 	panel=document.querySelector("textarea.notePanel");
 	if (event.ctrlKey && event.altKey && event.key=="e"){
-		document.showPanel()
-		panel.focus()
+		if(document.documentElement["scrollTop"]<50){
+			document.toggleAllNotesPanel()
+		}else{
+			document.showPanel()
+			panel.focus()
+		}
 	}else if(event.key=="Escape"){
 		document.hidePanel()
 		panel.blur()
