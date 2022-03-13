@@ -44,7 +44,10 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		opacity: 0.8;
 		z-index: 3000;
 	}
-	#all_notes_panel{
+	div#all_notes_panel pre{
+		color: #fff;
+	}
+	div#all_notes_panel{
 		color: #fff;
 		background-color: #333;
 		padding-top: 42px;
