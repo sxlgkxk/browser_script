@@ -1,7 +1,6 @@
 // ==UserScript==
 // @name         read_progress_style
-// @include      http://readonlinefreebook.com/*
-// @include      https://readonlinefreebook.com/*
+// @include      *
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_comment.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_comment.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
@@ -31,10 +30,8 @@ const create = tag => document.createElement(tag);
     return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
     }
 
-    GM_addStyle("div.container.full{color: #ccc; background:#232323}div.chapterContent{line-height:200% !important; width: 40% !important; font-size: 22px !important}")
-
     var container=create('p')
-    container.style="z-index:1; position:fixed; bottom:50px; left:50px; color:#a9a9a9; font-size:20px"
+    container.style="z-index:3000; position:fixed; bottom:50px; left:50px; color:#a9a9a9; font-size:20px"
     container.textContent=parseInt(getScrollPercent())+'%'
     document.body.append(container);
 
