@@ -39,7 +39,7 @@ css_dom.innerHTML=`<style>
 
 document.changeCSS=()=>{
 	_custom_css=localStorage.getItem('custom_css')
-	if(!custom_css) custom_css=""
+	if(!_custom_css) _custom_css=""
 	custom_css=prompt("css?", _custom_css)
 	if(custom_css)
 		localStorage.setItem("custom_css", custom_css)
