@@ -54,6 +54,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		padding-left: 10px;
 		padding-right: 10px;
 		padding-bottom: 10px;
+		z-index: 3000;
 	}
 	textarea.notePanel{
 		font-weight: bold;
@@ -69,6 +70,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		padding: 30px;
 	}
 	[hidden] { display: none !important; }
+	//div#mw-head, div#mw-panel{display: none !important;}
 </style>`
 
 // hide/show functions
