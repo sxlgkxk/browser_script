@@ -33,7 +33,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		color: #fff;
 		background-color: #333;
 		position: fixed;
-		bottom: 150px;
+		bottom: 0px;
 		right: 50px;
 		width: 50px;
 		height: 50px;
@@ -45,7 +45,7 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		color: #fff;
 		background-color: #333;
 		position: fixed;
-		bottom: 200px;
+		bottom: 50px;
 		right: 0px;
 		left: 0px;
 		top: 50px;
