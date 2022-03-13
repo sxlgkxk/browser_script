@@ -285,7 +285,7 @@ for(button of document.querySelectorAll('.w-translate')){
 	}
 }
 function dictionaryTranslate(word){
-	dictionaryHtml=localStorage.getItem("dictionary_"+word)
+	dictionaryHtml=localStorage.getItem("dictionaryFuzzy_"+word)
 	if(dictionaryHtml){
 		document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
 	}else{
@@ -300,7 +300,7 @@ function dictionaryTranslate(word){
 					}
 				}
 				dictionaryHtml+='</ul>'
-				localStorage.setItem("dictionary_"+word, dictionaryHtml)
+				localStorage.setItem("dictionaryFuzzy_"+word, dictionaryHtml)
 				document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
 			})
 	}
