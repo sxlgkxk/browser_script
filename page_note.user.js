@@ -116,7 +116,7 @@ document.toggleAllNotesPanel=()=>{
 }
 document.toggleNotePanle=()=>{
 	// all_notes_panel
-	if(document.documentElement["scrollTop"]<50){
+	if(document.documentElement["scrollTop"]<5){
 		document.toggleAllNotesPanel()
 	}else{
 		// notePanel
