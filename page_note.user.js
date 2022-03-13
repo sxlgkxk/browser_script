@@ -45,10 +45,10 @@ note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle
 		z-index: 3000;
 	}
 	div#all_notes_panel pre{
-		color: #fff;
+		color: #ddd;
 	}
 	div#all_notes_panel{
-		color: #fff;
+		color: #ddd;
 		background-color: #333;
 		padding-top: 42px;
 		padding-left: 10px;
