@@ -132,7 +132,7 @@ document.toggleNotePanle=()=>{
 document.addEventListener("keydown", function(event) {
 	panel=document.querySelector("textarea.notePanel");
 	if (event.ctrlKey && event.altKey && event.key=="e"){
-		if(document.documentElement["scrollTop"]<50){
+		if(document.documentElement["scrollTop"]==0){
 			document.toggleAllNotesPanel()
 		}else{
 			document.showPanel()
