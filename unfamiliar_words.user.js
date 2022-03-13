@@ -285,13 +285,13 @@ for(button of document.querySelectorAll('.w-translate')){
 	}
 }
 function dictionaryTranslate(word){
-	dictionaryHtml=localStorage.getItem("dictionaryFuzzy_"+word)
+	dictionaryHtml=localStorage.getItem("dictionary_"+word)
 	if(dictionaryHtml){
-		document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
+		document.querySelector(`#dictionaryDesc_`+word).innerHTML='<ul>'+dictionaryHtml+'</ul>'
 	}else{
 		axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/"+word)
 			.then((response) => {
-				dictionaryHtml='<ul>'
+				dictionaryHtml=''
 				for (meaing of response.data[0]["meanings"]){
 					dictionaryHtml+=`<b style="color:#8bdb81">`+meaing["partOfSpeech"]+`</b>`
 					for (definition of meaing["definitions"]){
@@ -299,9 +299,8 @@ function dictionaryTranslate(word){
 						dictionaryHtml+=`<li title="`+example+`">`+definition["definition"]+`</li>`
 					}
 				}
-				dictionaryHtml+='</ul>'
-				localStorage.setItem("dictionaryFuzzy_"+word, dictionaryHtml)
-				document.querySelector(`#dictionaryDesc_`+word).innerHTML=dictionaryHtml
+				localStorage.setItem("dictionary_"+word, dictionaryHtml)
+				document.querySelector(`#dictionaryDesc_`+word).innerHTML='<ul>'+dictionaryHtml+'</ul>'
 			})
 	}
 }
