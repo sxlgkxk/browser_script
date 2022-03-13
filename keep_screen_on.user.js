@@ -16,7 +16,7 @@
 // ==/UserScript==
 
 var scripts_dom = document.createElement('script');
-scripts_dom.src = 'https://github.com/richtr/NoSleep.js/raw/master/dist/NoSleep.min.js';
+scripts_dom.src = 'https://cdnjs.cloudflare.com/ajax/libs/nosleep/0.3.0/NoSleep.min.js';
 scripts_dom.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
@@ -24,6 +24,6 @@ document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 
 	setInterval(()=>{
 		console.log(NoSleep)
-	},1000)
+	},2000)
 
 })();
