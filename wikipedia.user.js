@@ -17,35 +17,6 @@
 
 (function(){
 
-waitdom_interval=setInterval(()=>{
-	kibana_dom=document.querySelector('div.kbnLocalApplicationWrapper')
-	if(!kibana_dom)return
-	clearInterval(waitdom_interval)
-
-	app_dom=document.createElement('div')
-	app_dom.innerHTML=`<div id="panel"></div>
-		<style>
-			#panel{
-				background-color: #232323;
-				color: #ddd;
-				padding: 10px;
-			}
-			button.customBtn{
-			}
-		</style>
-	`
-	kibana_dom.before(app_dom)
-
-	panel=document.querySelector('#panel')
-	panel.innerHTML =`
-		<button class="customBtn"></button>
-		<button class="customBtn"></button>
-		<button class="customBtn"></button>
-	`
-
-
-}, 200)
-
-
+	console.log("hi")
 
 })();
