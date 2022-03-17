@@ -38,9 +38,9 @@ waitdom_interval=setInterval(()=>{
 
 	panel=document.querySelector('#panel')
 	panel.innerHTML =`
-		<button class="customBtn"></button>
-		<button class="customBtn"></button>
-		<button class="customBtn"></button>
+		<button class="customBtn">btn1</button>
+		<button class="customBtn">btn2</button>
+		<button class="customBtn">btn3</button>
 	`
 
 
