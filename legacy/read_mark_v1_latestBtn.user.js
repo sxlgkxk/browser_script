@@ -101,29 +101,6 @@ document.gotoMark=function(val){
 	percent=localStorage.setItem("mark_percent"+val)
 }
 
-function gist(){
-	gist_token=localStorage.getItem('gist_token')
-	if(!gist_token){
-		gist_token=prompt('gist_token?')
-		localStorage.setItem('gist_token',gist_token)
-	}
-	
-	let push_text=JSON.stringify({
-		"percent": getScrollPercent(),
-		"url": location.href,
-		"date": Math.round(new Date())
-	})
-
-	let gist_id="00fd89bedaf51674bfdb7bdb38720749"
-	axios.patch("https://api.github.com/gists/"+gist_id
-			, {files:{"read_latest.json":{"content": push_text}}}
-			, {headers:{Authorization:"token "+gist_token}}
-		)
-		.then((response) => {
-			alert('mark success')
-		})
-}
-
 //-------------------------------- mark_button --------------------------------
 
 body=document.querySelector('body')
@@ -151,7 +128,83 @@ mark_button.classList.add("float_btn")
 mark_button.style.bottom='50px'
 mark_button.style.right='50px'
 mark_button.onclick=()=>{
-	document.toggleMarkPanel()
+	gist_token=localStorage.getItem('gist_token')
+	if(!gist_token){
+		gist_token=prompt('gist_token?')
+		localStorage.setItem('gist_token',gist_token)
+	}
+	
+	if(location.href==latest_url && Math.abs(document.documentElement["scrollTop"]-latest_percent/100*document.documentElement["scrollHeight"])<=2){
+		// 多书签
+		document.toggleMarkPanel()
+	}else{
+		// 默认书签
+		let push_text=JSON.stringify({
+			"percent": getScrollPercent(),
+			"url": location.href,
+			"date": Math.round(new Date())
+		})
+
+		let gist_id="00fd89bedaf51674bfdb7bdb38720749"
+		axios.patch("https://api.github.com/gists/"+gist_id
+				, {files:{"read_latest.json":{"content": push_text}}}
+				, {headers:{Authorization:"token "+gist_token}}
+			)
+			.then((response) => {
+				alert('mark success')
+			})
+	}
 }
 
+//-------------------------------- goto_latest_button --------------------------------
+
+goto_latest_button=document.createElement('button')
+body.before(goto_latest_button)
+
+goto_latest_button.innerHTML='latest'
+goto_latest_button.id='goto_latest_btn'
+goto_latest_button.classList.add("float_btn")
+goto_latest_button.style.bottom='50px'
+goto_latest_button.style.right='100px'
+goto_latest_button.onclick=()=>{
+	gist_token=localStorage.getItem('gist_token')
+	if(!gist_token){
+		gist_token=prompt('gist_token?')
+		localStorage.setItem('gist_token',gist_token)
+	}
+	let gist_id="00fd89bedaf51674bfdb7bdb38720749"
+	axios.get("https://api.github.com/gists/"+gist_id)
+		.then((response) => {
+			let data = response.data;
+			content=JSON.parse(data.files["read_latest.json"].content)
+			latest_url=content["url"]
+			latest_percent=content["percent"]
+			read_latest_date=content["date"]
+
+			if(location.href==latest_url && Math.abs(document.documentElement["scrollTop"]-latest_percent/100*document.documentElement["scrollHeight"])<=2){
+				// 多书签
+				document.toggleMarkPanel()
+			}else{
+				// 默认书签
+				localStorage.setItem("is_goto_recent", "true")
+				if(location.href!=latest_url)
+					location.href=latest_url
+				else{
+					document.documentElement["scrollTop"]=latest_percent/100*document.documentElement["scrollHeight"]
+					localStorage.setItem("is_goto_recent", "")
+
+					now=Math.round(new Date())
+					date_html="latest "+Math.round((now-read_latest_date)/1000/3600)+"h"
+					goto_latest_button.innerHTML=date_html
+				}
+			}
+		})
+}
+if(localStorage.getItem("is_goto_recent")) {
+	let wait_dom_interval = setInterval(() => {
+		if (!axios) return
+		clearInterval(wait_dom_interval)
+		$("#goto_latest_btn").click()
+	}, 200)
+}
 })();
