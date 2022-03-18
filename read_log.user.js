@@ -28,7 +28,7 @@ function getScrollPercent() {
 
 (function(){
 
-//-------------------------------- code snippets --------------------------------
+//-------------------------------- hr --------------------------------
 
 function addLine(){
 	line=document.createElement("hr")
@@ -39,9 +39,7 @@ function addLine(){
 	body.before(line)
 }
 
-//-------------------------------- main --------------------------------
-
-// line style
+// style
 style=document.createElement("div")
 body.before(style)
 style.innerHTML =`<style>
@@ -54,5 +52,22 @@ setInterval(()=>{
 	addLine()
 },1000*300)
 
+//-------------------------------- statistics --------------------------------
+
+// read statistics log
+insertbefore_dom=document.querySelector("div.chapter-detail")
+readlog_panel=document.createElement("div")
+insertbefore_dom.before(readlog_panel)
+readlog_panel.innerHTML =`<canvas id="calHeatmap"></canvas>
+<style>
+	#calHeatmap{
+		width: 140px;
+		height: 60px;
+		background-color: #333;
+		margin-left:auto;
+		margin-right:auto;
+		display:block;
+	}
+</style>`
 
 })();
