@@ -33,7 +33,7 @@ function getScrollPercent() {
 function addLine(){
 	line=document.createElement("hr")
 	line.classList.add("mark")
-	line.style.top=document.documentElement["scrollTop"]+100+"px"
+	line.style.top=document.documentElement["scrollTop"]+35+"px"
 	line.style.left='0px'
 	line.style.width='100%'
 	body.before(line)
