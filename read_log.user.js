@@ -230,8 +230,9 @@ function log(){
 	
 	refreshHeatmap()
 }
+document.log=log
 
-setInterval(()=>{log()},1000*300)
+setInterval(()=>{document.log()},1000*300)
 refreshHeatmap()
 
 })();
