@@ -20,7 +20,9 @@
 
 blockWidth=10
 blockPadding=3
-canvasWidth=(blockWidth+blockPadding)*53+blockPadding
+// weeksCount=53
+weeksCount=30
+canvasWidth=(blockWidth+blockPadding)*weeksCount+blockPadding
 canvasHeight=(blockWidth+blockPadding)*7+blockPadding
 
 //-------------------------------- common functions --------------------------------
@@ -96,15 +98,17 @@ addScript(`
 
 function getColor(count){
 	colors=[
-		["#eeeeee", 0],
-		["#cef1dd", 0],
-		["#9ee3bb", 0],
-		["#6dd499", 0],
-		["#3cc677", 0],
-		["#33a865", 0],
-		["#2a8b53", 0],
-		["#216d41", 0],
+		"#161b22",
+		"#cef1dd",
+		"#9ee3bb",
+		"#6dd499",
+		"#3cc677",
+		"#33a865",
+		"#2a8b53",
+		"#216d41"
 	]
+	max_count=30
+	return colors[Math.ceil(count/max_count*(colors.length-1))]
 }
 
 function setBlock(x,y,count,ctx){
@@ -138,7 +142,7 @@ function refreshHeatmap(){
 		y=weekday
 
 		date1=new Date(date-getRegularWeekday(date)*3600*24*1000)
-		x=53-(now1-date1)/1000/3600/24/7
+		x=weeksCount-(now1-date1)/1000/3600/24/7
 
 		dateStr=getDateStr(date)
 		uuid=getUuid()
@@ -153,7 +157,7 @@ function refreshHeatmap(){
 function getUuid(){
 	uuid=localStorage.getItem('uuid')
 	if(!uuid){
-		uuid=String(Math.random()).substring(2,2)
+		uuid=String(Math.random()).substring(2,4)
 		localStorage.setItem('uuid', uuid)
 	}
 	return uuid
@@ -161,7 +165,7 @@ function getUuid(){
 
 function getDateStr(date=null){
 	date=date?date:new Date()
-	year=String(date.getFullYear()).substring(2,2)
+	year=String(date.getFullYear()).substring(2,4)
 	month=String(date.getMonth()+1).padStart(2,'0')
 	day=String(date.getDate()).padStart(2,'0')
 	return year+month+day
@@ -177,7 +181,32 @@ function updateLocalLog(uuid, date){
 }
 
 function updateGist(){
-	console.log("hi")
+	gist_id="cfa70a44bb181edbb2be19dacbcf6808"
+	filename="read_log.json"
+
+	log=localStorage.getItem('readlog')
+	log=log?JSON.parse(log):{}
+
+	// pull
+	gist_get_async(gist_id, filename).then((content)=>{
+		remoteLog=JSON.parse(content)
+		for([date, data] of Object.entries(remoteLog)){
+			if(!log[date]){
+				log[date]=data;
+				continue
+			}
+			for([uuid, count] of Object.entries(data)){
+				if(uuid!=getUuid())
+					log[date][uuid]=count
+			}
+		}
+
+		// push
+		gist_set_async(gist_id, filename, JSON.stringify(log)).then((response)=>{alert("update success")})
+		localStorage.setItem('readlog', JSON.stringify(log))
+
+		refreshHeatmap()
+	})
 }
 
 //-------------------------------- statistics --------------------------------
