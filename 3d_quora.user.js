@@ -23,7 +23,7 @@
 
 panel_3d=document.createElement("div")
 document.body.before(panel_3d);
-panel_3d.innerHTML =`<button class="float_btn">3d</button>
+panel_3d.innerHTML =`<button class="float_btn" id="float_3d_btn">3d</button>
 <style>
 	button.float_btn{
 		font-weight: bold;
@@ -47,7 +47,9 @@ wait_interval=setInterval(function(){
 	const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 	const renderer = new THREE.WebGLRenderer();
+	window.renderer = renderer;
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.domElement.hidden = true;
 	document.body.before( renderer.domElement );
 
 	const geometry = new THREE.BoxGeometry();
@@ -67,6 +69,11 @@ wait_interval=setInterval(function(){
 	};
 
 	animate();
+
+	document.querySelector('button#float_3d_btn').onclick = function() {
+		console.log("hi")
+		window.renderer.domElement.hidden=!window.renderer.domElement.hidden
+	}
 },200)
 
 })();
