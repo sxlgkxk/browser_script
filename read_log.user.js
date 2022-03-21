@@ -21,7 +21,7 @@
 blockWidth=10
 blockPadding=3
 // weeksCount=53
-weeksCount=30
+weeksCount=30 // 393, 94
 canvasWidth=(blockWidth+blockPadding)*weeksCount+blockPadding
 canvasHeight=(blockWidth+blockPadding)*7+blockPadding
 
@@ -151,7 +151,6 @@ function refreshHeatmap(){
 
 		setBlock(x,y,count,ctx)
 	}
-
 }
 
 function getUuid(){
