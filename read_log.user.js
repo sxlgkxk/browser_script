@@ -190,14 +190,15 @@ function updateGist(){
 	// pull
 	gist_get_async(gist_id, filename).then((content)=>{
 		remoteLog=JSON.parse(content)
-		for([date, data] of Object.entries(remoteLog)){
+		for(let [date, data] of Object.entries(remoteLog)){
 			if(!log[date]){
 				log[date]=data;
 				continue
 			}
-			for([uuid, count] of Object.entries(data)){
-				if(uuid!=getUuid())
+			for(let [uuid, count] of Object.entries(data)){
+				if(uuid!=getUuid()){
 					log[date][uuid]=count
+				}
 			}
 		}
 
