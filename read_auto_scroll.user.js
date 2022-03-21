@@ -31,7 +31,7 @@ function move() {
 		speed_cnt=(speed_cnt+1)%speed_factor;
 		if(speed_cnt==0)
 			window.scrollBy(0, speed);
-		if((window.innerHeight + window.scrollY) +50>= document.body.scrollHeight){
+		if((window.innerHeight + window.scrollY) +5 >= document.body.scrollHeight){
 			if (!entering_nextpage){
 				entering_nextpage=true
 				setTimeout(()=>{
