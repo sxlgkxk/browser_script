@@ -177,7 +177,7 @@ function updateLocalLog(uuid, date){
 	if(!log[date]) log[date]={}
 	if(!log[date][uuid]) log[date][uuid]=0
 	log[date][uuid]+=1
-	log=localStorage.getItem('readlog', JSON.stringify(log))
+	localStorage.setItem('readlog', JSON.stringify(log))
 }
 
 function updateGist(){
