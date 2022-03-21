@@ -39,7 +39,7 @@ function move() {
 					if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
 					if(location.href+'#'!=next_dom.href)
 						location.href=next_dom.href
-				}, 5000)
+				}, 1000*60)
 			}
 		}
 		requestAnimationFrame(move);
