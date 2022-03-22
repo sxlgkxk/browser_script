@@ -68,7 +68,7 @@ async function gist_set_async(gist_id, filename, content){
 	return await axios.patch("https://api.github.com/gists/"+gist_id, {files:files}, {headers:{Authorization:"token "+gist_token}})
 }
 
-function addScript(html){
+function addStyle(html){
 	style=document.createElement("div")
 	body.before(style)
 	style.innerHTML =`<style>`+html+`</style>`
@@ -83,7 +83,7 @@ function addLine(){
 	body.before(line)
 }
 
-addScript(`
+addStyle(`
 	hr.mark{
 		position: absolute;
 		width: 100%;
