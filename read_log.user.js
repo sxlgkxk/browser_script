@@ -107,8 +107,8 @@ function getColor(count){
 		"#2a8b53",
 		"#216d41"
 	]
-	max_count=30
-	return colors[Math.ceil(count/max_count*(colors.length-1))]
+	max_count=12*8
+	return colors[Math.ceil(Math.min(count/max_count, 1)*(colors.length-1))]
 }
 
 function setBlock(x,y,count,ctx){
