@@ -33,12 +33,9 @@ function runFunc(main, waitList=[]){
 	},200)
 }
 
-//-------------------------------- common functions --------------------------------
-
 //-------------------------------- main --------------------------------
 
 runFunc(function() {
-	console.log(Api)
 	panel_3d=document.createElement("div")
 	document.body.before(panel_3d);
 	panel_3d.innerHTML =`<button class="float_btn" id="float_3d_btn">3d</button>
