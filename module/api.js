@@ -82,7 +82,33 @@ Api.addStyle(`
 		opacity: 0.8;
 		z-index: 3000;
 	}
+
 	[hidden] { display: none !important; }
+
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	th, td {
+		text-align: left;
+		padding: 8px;
+	}
+
+	tr:nth-child(even){background-color: #f2f2f2}
+
+	th {
+		background-color: #04AA6D;
+		color: white;
+	}
+		
+	textarea {
+		padding: 10px;
+		line-height: 1.5;
+		border-radius: 5px;
+		border: 1px solid #ccc;
+		box-shadow: 1px 1px 1px #999;
+	}
 `)
 
 window.$ = selector => document.querySelector(selector);
