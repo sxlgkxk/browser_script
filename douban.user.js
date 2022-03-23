@@ -21,14 +21,18 @@
 //-------------------------------- common functions --------------------------------
 
 function runFunc(main, waitList=[]){
-	wait_interval=setInterval(function(){
+	let wait_interval=setInterval(function(){
 		for(let wait of waitList)
 			if (!(wait in window)){
 				console.log("waiting "+wait)
 				return
 			}
 		clearInterval(wait_interval)
-		main()
+		try {
+			main()
+		} catch (error) {
+			console.error(error)
+		}
 	},200)
 }
 
@@ -36,6 +40,7 @@ function runFunc(main, waitList=[]){
 
 function removeUsedBook(){
 	sidebar=document.querySelector('#content > div > div.aside')
+	if(!sidebar)return
 	let is_start_remove=false
 	for(let dom of sidebar.children){
 		if(dom.tagName=="H2" && dom.innerText=="二手市场")
@@ -49,7 +54,9 @@ function removeUsedBook(){
 //-------------------------------- main --------------------------------
 
 runFunc(function() {
-	removeUsedBook()
+	removeUsedBook();
+	return;
+
 	container_dom=document.querySelector("div#wrapper")
 
 	app_dom=document.createElement('div')
@@ -108,6 +115,6 @@ runFunc(function() {
 	document.querySelector('button#float_3d_btn').onclick = function() {
 		window.renderer.domElement.hidden=!window.renderer.domElement.hidden
 	}
- },["THREE","Api","Three"])
+ },[])
 
 })();

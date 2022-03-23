@@ -111,9 +111,9 @@ Api.addStyle(`
 	}
 `)
 
-window.$ = selector => document.querySelector(selector);
-window.$$ = selector => document.querySelectorAll(selector);
-window.create = tag => document.createElement(tag);
+// window.$ = selector => document.querySelector(selector);
+// window.$$ = selector => document.querySelectorAll(selector);
+// window.create = tag => document.createElement(tag);
 
 
 

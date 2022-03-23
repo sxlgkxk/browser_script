@@ -1,16 +1,16 @@
 (function(){
 
-class Three{
-	// Camera
-	// Object
-	// Map
-	// Screen
-	// Texture
-	// Music
-	// Control
-}
+// class Three{
+// 	// Camera
+// 	// Object
+// 	// Map
+// 	// Screen
+// 	// Texture
+// 	// Music
+// 	// Control
+// }
 
-window.Three=Three;
+// window.Three=Three;
 
 
 
