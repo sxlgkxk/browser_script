@@ -20,6 +20,13 @@
 
 //-------------------------------- common functions --------------------------------
 
+// function getGist(gistid, filename){
+// 	axios.get('https://api.github.com/gists/' + gistid)
+// 		.then(function(response){
+// 			content=response.data.files[filename].content;
+// 		})
+// }
+
 function runFunc(main, waitList=[]){
 	let wait_interval=setInterval(function(){
 		for(let wait of waitList)
