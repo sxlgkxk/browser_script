@@ -85,6 +85,7 @@ Api.addStyle(`
 
 	[hidden] { display: none !important; }
 
+	/*
 	table {
 		border-collapse: collapse;
 		width: 100%;
@@ -109,6 +110,7 @@ Api.addStyle(`
 		border: 1px solid #ccc;
 		box-shadow: 1px 1px 1px #999;
 	}
+	*/
 `)
 
 // window.$ = selector => document.querySelector(selector);

@@ -16,56 +16,29 @@
 // @require      https://threejs.org/build/three.js
 // ==/UserScript==
 
+/*
+1. 代码目的
+	放到sxlgkxk.github.io侧边栏3d项中, 打造自己的Three(module封装). 以此为playground探索3d的自由度与可玩性
+
+	之后, 会尝试一个"github 3d profile"的活动(具有多人性/潮流性/运动性): 之后会打造另一个github_3d_profile.user.js. 按下不表
+
+2. 代码结构
+
+3. 数据结构
+
+4. 补充说明
+
+
+*/
+
 (function(){
 
 //-------------------------------- common functions --------------------------------
 
-// function getGist(gistid, filename){
-// 	axios.get('https://api.github.com/gists/' + gistid)
-// 		.then(function(response){
-// 			content=response.data.files[filename].content;
-// 		})
-// }
-
 function runFunc(main, waitList=[]){
 	let wait_interval=setInterval(function(){
-		for(let wait of waitList)
-			if (!(wait in window)){
-				console.log("waiting "+wait)
-				return
-			}
-		clearInterval(wait_interval)
-		main()
-	},200)
-}
-
-class Three{
-	constructor(canvasWidth=400, canvasHeight=300){
-		this.renderer=new THREE.WebGLRenderer();
-		this.canvasWidth=canvasWidth;
-		this.canvasHeight=canvasHeight;
-		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 75, this.canvasWidth / this.canvasHeight, 0.1, 1000 );
-		this.dom=this.renderer.domElement
-
-		this.renderer.setSize(this.canvasWidth, this.canvasHeight);
-		this.camera.position.z = 5;
-
-
-		this.geometry = new THREE.BoxGeometry();
-		this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-		this.cube = new THREE.Mesh( this.geometry, this.material );
-
-		this.scene.add( this.cube );
-	}
-
-	run() {
-		this.cube.rotation.x += 0.01;
-		this.cube.rotation.y += 0.01;
-		this.renderer.render( this.scene, this.camera );
-		requestAnimationFrame(()=>this.run());
-	};
-}
+		for(let wait of waitList) if (!(wait in window)){console.log("waiting "+wait);return}
+		clearInterval(wait_interval);main();},200)}
 
 //-------------------------------- code snippets --------------------------------
 
@@ -74,11 +47,15 @@ class Three{
 //-------------------------------- main --------------------------------
 
 runFunc(function() {
+	// 插入dom
 	three=new Three(800,600)
 	container=document.querySelector('#three_container')
 	container=container?container:document.body
 	container.before(three.dom);
 
+	// 定制3d空间
+
+	// 运行3d
 	three.run();
  },["THREE","Api"])
 
