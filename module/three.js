@@ -43,7 +43,12 @@
 (function(){
 
 class Three{
-	constructor(canvasWidth=400, canvasHeight=300){
+	constructor(canvasWidth=320, canvasHeight=240){
+		/*
+			1. args
+				canvasWidth
+				canvasHeight
+		*/
 		this.renderer=new THREE.WebGLRenderer();
 		this.canvasWidth=canvasWidth;
 		this.canvasHeight=canvasHeight;
@@ -69,6 +74,8 @@ class Three{
 		requestAnimationFrame(()=>this.run());
 	};
 
+	resize(width, height){
+	}
 
 }
 

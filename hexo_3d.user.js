@@ -47,11 +47,14 @@ function runFunc(main, waitList=[]){
 //-------------------------------- main --------------------------------
 
 runFunc(function() {
+	// 获取dom
+	three=new Three()
+	dom=three.dom
+
 	// 插入dom
-	three=new Three(800,600)
 	container=document.querySelector('#three_container')
 	container=container?container:document.body
-	container.before(three.dom);
+	container.before(dom);
 
 	// 定制3d空间
 
