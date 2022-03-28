@@ -51,7 +51,6 @@ class Three{
 		this.renderer.setSize(this.canvasWidth, this.canvasHeight);
 		this.camera.position.z = 5;
 
-
 		this.geometry = new THREE.BoxGeometry();
 		this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 		this.cube = new THREE.Mesh( this.geometry, this.material );

@@ -49,7 +49,7 @@ function runFunc(main, waitList=[]){
 runFunc(function() {
 	// 获取dom
 	three=new Three()
-	dom=three.dom
+	dom=three.getDom()
 
 	// 插入dom
 	container=document.querySelector('#three_container')
@@ -57,6 +57,15 @@ runFunc(function() {
 	container.before(dom);
 
 	// 定制3d空间
+	objects=[
+		{
+			type: "wall"
+		},
+		{
+			type: ""
+		}
+	]
+	three.Objects=objects
 
 	// 运行3d
 	three.run();

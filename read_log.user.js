@@ -2,6 +2,7 @@
 // @name         read_log
 // @include      http://readonlinefreebook.com/*
 // @include      https://readonlinefreebook.com/*
+// @include      *wikipedia.org*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
@@ -212,6 +213,7 @@ function updateGist(){
 //-------------------------------- statistics --------------------------------
 
 chapter_dom=document.querySelector("div.chapter-detail")
+if(!chapter_dom) chapter_dom=document.body
 heatmap_panel=document.createElement("div")
 chapter_dom.before(heatmap_panel)
 heatmap_panel.innerHTML =`<canvas id="heatmap" width="`+canvasWidth+`" height="`+canvasHeight+`"></canvas>`

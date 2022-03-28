@@ -12,9 +12,9 @@
 	2. Three内部属性
 		canvasWidth
 		canvasHeight
-		renderer
-		scene
-		camera
+		Renderer
+		Scene
+		Camera
 		dom
 
 		geometry
@@ -31,7 +31,6 @@
 		Map
 		Screen
 		Texture
-		Music
 		Control
 
 	2. 关于默认视角等的选择:
@@ -42,41 +41,99 @@
 */
 (function(){
 
+class _Object{
+	static Line(){
+		let points = [];
+		points.push( new THREE.Vector3( - 10, 0, 0 ) );
+		points.push( new THREE.Vector3( 0, 10, 0 ) );
+		points.push( new THREE.Vector3( 10, 0, 0 ) );
+		let geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+		let material = new THREE.LineBasicMaterial( { color: 0x0000ff } )
+		let line = new THREE.Line( geometry, material );
+		return line
+	}
+
+	static Cube(){
+		let geometry = new THREE.BoxGeometry();
+		let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		let cube = new THREE.Mesh(geometry,material );
+		return cube
+	}
+}
+
 class Three{
+	/*
+		1. 功能说明
+			新建3d dom
+		
+		2. 函数
+			constructor : 初始化, 新建dom
+			run 		: 开始渲染
+			setSize 	: 设置canvas大小
+		
+		3. 属性(this.xx)
+			Config
+
+			Renderer
+			Scene
+			Camera
+
+			Objects
+
+		4. 补充说明
+			1. THREE的接口: 
+				Renderer: WebGLRenderer
+				Camera 	: PerspectiveCamera
+				Scene 	: Scene
+
+			2. 使用方法:
+				1. new Three()
+				2. Three.run()
+				3. 通过操作Three.Objects来操作场景内元素
+	*/
 	constructor(canvasWidth=320, canvasHeight=240){
-		/*
-			1. args
-				canvasWidth
-				canvasHeight
-		*/
-		this.renderer=new THREE.WebGLRenderer();
-		this.canvasWidth=canvasWidth;
-		this.canvasHeight=canvasHeight;
-		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera( 75, this.canvasWidth / this.canvasHeight, 0.1, 1000 );
-		this.dom=this.renderer.domElement
+		// Config
+		this.Config={
+			canvasWidth: 320,
+			canvasHeight: 240
+		}
+		this.Config.canvasWidth=canvasWidth;
+		this.Config.canvasHeight=canvasHeight;
 
-		this.renderer.setSize(this.canvasWidth, this.canvasHeight);
-		this.camera.position.z = 5;
+		// Renderer
+		this.Renderer=new THREE.WebGLRenderer();
+		this.Renderer.setSize(this.Config.canvasWidth, this.Config.canvasHeight);
 
+		// Scene
+		this.Scene = new THREE.Scene();
 
-		this.geometry = new THREE.BoxGeometry();
-		this.material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-		this.cube = new THREE.Mesh( this.geometry, this.material );
+		// Camera
+		this.Camera = new THREE.PerspectiveCamera( 90, this.Config.canvasWidth / this.Config.canvasHeight, 0.1, 1000 );
 
-		this.scene.add( this.cube );
+		this._Objects=[]
+		this.setMap()
 	}
 
 	run() {
-		this.cube.rotation.x += 0.01;
-		this.cube.rotation.y += 0.01;
-		this.renderer.render( this.scene, this.camera );
+		this.Renderer.render( this.Scene, this.Camera );
 		requestAnimationFrame(()=>this.run());
 	};
 
-	resize(width, height){
+	setSize(width, height){
 	}
 
+	getDom(){
+		return this.Renderer.domElement
+	}
+
+	setMap(){
+	}
+
+	get Objects(){return this._Objects}
+	set Objects(objects){
+		this._Objects=objects
+	}
 }
 
 
