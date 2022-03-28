@@ -106,11 +106,11 @@ addStyle(`
 	button.pagiBtn{
 		background-color: #333;
 		color: #fff;
-		margin: 2px;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-top: 4px;
-		padding-bottom: 4px;
+		margin: 4px;
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 9px;
+		padding-bottom: 9px;
 	}
 `)
 
