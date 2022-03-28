@@ -278,7 +278,7 @@ history_panel.innerHTML =`<div>
 
 history_data=localStorage.getItem('history_data')
 history_data=history_data?JSON.parse(history_data):{}
-history_data[location.href]={date:new Date().getTime(), title:document.title, url:location.href}
+history_data[location.href]={date:new Date().getTime(), title:document.title.replace(" - Wikipedia",''), url:location.href}
 localStorage.setItem('history_data', JSON.stringify(history_data))
 history_list=Object.values(history_data).sort((a,b)=>{return b.date-a.date})
 
