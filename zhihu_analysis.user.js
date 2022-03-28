@@ -80,7 +80,7 @@ let wait_dom_interval=setInterval(()=>{
 	// dom
 	body=document.querySelector('#ProfileHeader > div')
 	app=document.createElement('div')
-	body.before(app)
+	document.body.before(app)
 
 	// style
 	app.style.lineHeight='2'

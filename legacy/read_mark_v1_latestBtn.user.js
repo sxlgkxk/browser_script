@@ -45,7 +45,7 @@ let latest_percent=0
 
 body=document.querySelector('body')
 mark_panel=document.createElement('div')
-body.before(mark_panel)
+document.body.before(mark_panel)
 
 mark_panel_list_html=""
 for(let i=0;i<10;i++){

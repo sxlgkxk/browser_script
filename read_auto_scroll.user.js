@@ -50,7 +50,7 @@ move()
 // move button dom insert
 body=document.querySelector('body')
 move_button=document.createElement('button')
-body.before(move_button)
+document.body.before(move_button)
 
 // move button style
 move_button.innerHTML='move'

@@ -25,7 +25,7 @@ if(document.body.classList.contains('page-profile')){
 
 		// app_dom
 		app=document.createElement('div')
-		body.before(app)
+		document.body.before(app)
 		app.classList.add('container-xl')
 		app.style.lineHeight='2'
 		app.style.color='#c6c6c6'

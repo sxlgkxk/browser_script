@@ -56,6 +56,8 @@ runFunc(function() {
 	container=container?container:document.body
 	container.before(dom);
 
+	// 设置自适应大小
+
 	// 定制3d空间
 	objects=[
 		{

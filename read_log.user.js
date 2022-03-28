@@ -71,7 +71,7 @@ async function gist_set_async(gist_id, filename, content){
 
 function addStyle(html){
 	style=document.createElement("div")
-	body.before(style)
+	document.body.before(style)
 	style.innerHTML =`<style>`+html+`</style>`
 }
 
@@ -81,7 +81,7 @@ function addLine(){
 	line=document.createElement("hr")
 	line.classList.add("mark")
 	line.style.top=document.documentElement["scrollTop"]+35+"px"
-	body.before(line)
+	document.body.before(line)
 }
 
 addStyle(`

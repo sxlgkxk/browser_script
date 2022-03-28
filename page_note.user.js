@@ -24,7 +24,7 @@ document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 // move button dom insert
 body=document.querySelector('body')
 note_button=document.createElement('div')
-body.before(note_button)
+document.body.before(note_button)
 note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
 <textarea class="notePanel" hidden></textarea>
 <div id="all_notes_panel" hidden>

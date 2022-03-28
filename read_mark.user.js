@@ -32,7 +32,7 @@ addScript('https://unpkg.com/axios/dist/axios.min.js')
 
 function addStyle(html){
 	style=document.createElement("div")
-	body.before(style)
+	document.body.before(style)
 	style.innerHTML =`<style>`+html+`</style>`
 }
 
@@ -112,7 +112,7 @@ document.setMark=function(val){
 
 body=document.querySelector('body')
 mark_button=document.createElement('button')
-body.before(mark_button)
+document.body.before(mark_button)
 
 // move button style
 mark_button.innerHTML=`<style>
