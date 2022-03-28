@@ -114,6 +114,10 @@ addStyle(`
 	}
 `)
 
+for(let i=1;i<=31;i++){
+	addStyle(`td.historyDay`+i+`{background-color: rgba(`+Math.floor(Math.random()*255)+`,`+Math.floor(Math.random()*255)+`,`+Math.floor(Math.random()*255)+`, 0.5);}`)
+}
+
 function getColor(count){
 	colors=[
 		"#161b22",
@@ -182,9 +186,9 @@ function getUuid(){
 
 function getHistoryDateStr(date=null){
 	date=new Date(date)
-	month=String(date.getMonth()+1)+"月"
-	day=String(date.getDate())+"日"
-	return month+day
+	month=String(date.getMonth()+1)
+	day=String(date.getDate())
+	return month+"."+day
 }
 
 function getDateStr(date=null){
@@ -293,7 +297,7 @@ function setHistoryTable(page){
 
 	for(i=start;i<end;i++){
 		history_table.innerHTML+=`<tr>
-			<td>`+getHistoryDateStr(history_list[i].date)+`</td>
+			<td class="historyDay`+(new Date().getDate())+`">`+getHistoryDateStr(history_list[i].date)+`</td>
 			<td><a href="`+history_list[i].url+`">`+history_list[i].title+`</a></td>
 		</tr>`
 	}
