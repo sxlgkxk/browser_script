@@ -288,7 +288,7 @@ history_list=Object.values(history_data).sort((a,b)=>{return b.date-a.date})
 
 function setHistoryTable(page){
 	page=page?page:1
-	history_pageSize=20
+	history_pageSize=10
 	history_table=document.querySelector("#history_table")
 	history_table.innerHTML=""
 
