@@ -108,7 +108,7 @@ function getColor(count){
 		"#2a8b53",
 		"#216d41"
 	]
-	max_count=12*8
+	max_count=60*8
 	return colors[Math.ceil(Math.min(count/max_count, 1)*(colors.length-1))]
 }
 
@@ -234,7 +234,7 @@ function log(){
 }
 document.log=log
 
-setInterval(()=>{document.log()},1000*300)
+setInterval(()=>{document.log()},1000*60)
 refreshHeatmap()
 
 })();
