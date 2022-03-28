@@ -42,6 +42,16 @@
 (function(){
 
 class _Object{
+	/*
+- 3d图表
+- 2d图表
+- 视频/图片
+- 网页嵌入
+- 建造
+	- 地面划线
+	- 平地面
+	- 竖墙
+	*/
 	static Line(){
 		let points = [];
 		points.push( new THREE.Vector3( - 10, 0, 0 ) );

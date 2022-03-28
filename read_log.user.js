@@ -95,6 +95,23 @@ addStyle(`
 		margin: 0 auto;
 		display:block;
 	}
+	table#history_table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+	#history_table th, #history_table td {
+		text-align: left;
+		padding: 8px;
+	}
+	button.pagiBtn{
+		background-color: #333;
+		color: #fff;
+		margin: 2px;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
 `)
 
 function getColor(count){
@@ -161,6 +178,13 @@ function getUuid(){
 		localStorage.setItem('uuid', uuid)
 	}
 	return uuid
+}
+
+function getHistoryDateStr(date=null){
+	date=new Date(date)
+	month=String(date.getMonth()+1)+"月"
+	day=String(date.getDate())+"日"
+	return month+day
 }
 
 function getDateStr(date=null){
@@ -236,5 +260,60 @@ document.log=log
 
 setInterval(()=>{document.log()},1000*60)
 refreshHeatmap()
+
+//-------------------------------- history --------------------------------
+
+chapter_dom=document.querySelector("div.chapter-detail")
+if(!chapter_dom) chapter_dom=document.body
+history_panel=document.createElement("div")
+chapter_dom.before(history_panel)
+history_panel.innerHTML =`<div>
+	<table id="history_table">
+	</table>
+	<button id="history_prev" class="pagiBtn">\<</button>
+	<button id="history_next" class="pagiBtn">\></button>
+	<input id="history_input" type="text" value="1" size="3">
+	<button id="history_go" class="pagiBtn">go</button>
+</div>`
+
+history_data=localStorage.getItem('history_data')
+history_data=history_data?JSON.parse(history_data):{}
+history_data[location.href]={date:new Date().getTime(), title:document.title, url:location.href}
+localStorage.setItem('history_data', JSON.stringify(history_data))
+history_list=Object.values(history_data).sort((a,b)=>{return b.date-a.date})
+
+function setHistoryTable(page){
+	page=page?page:1
+	history_pageSize=20
+	history_table=document.querySelector("#history_table")
+	history_table.innerHTML=""
+
+	start=(page-1)*history_pageSize
+	end=Math.min(start+history_pageSize, history_list.length)
+
+	for(i=start;i<end;i++){
+		history_table.innerHTML+=`<tr>
+			<td>`+getHistoryDateStr(history_list[i].date)+`</td>
+			<td><a href="`+history_list[i].url+`">`+history_list[i].title+`</a></td>
+		</tr>`
+	}
+}
+setHistoryTable(1)
+
+document.querySelector('#history_prev').onclick=()=>{
+	history_page=document.querySelector('#history_input').value;
+	setHistoryTable(--history_page);
+	document.querySelector('#history_input').value=history_page
+}
+document.querySelector('#history_next').onclick=()=>{
+	history_page=document.querySelector('#history_input').value;
+	setHistoryTable(++history_page);
+	document.querySelector('#history_input').value=history_page
+}
+
+document.querySelector('#history_go').onclick=()=>{
+	history_page=document.querySelector('#history_input').value;
+	setHistoryTable(history_page);
+}
 
 })();

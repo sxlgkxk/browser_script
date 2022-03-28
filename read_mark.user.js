@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name         read_mark
+// @include      *
 // @include      http://readonlinefreebook.com/*
 // @include      https://readonlinefreebook.com/*
+// @include      *wikipedia.org*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_mark.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_mark.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
@@ -16,72 +18,79 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-//-------------------------------- common functions --------------------------------
-var scripts_dom = document.createElement('script');
-scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
-scripts_dom.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(scripts_dom);
-
-const $ = selector => document.querySelector(selector);
-const $$ = selector => document.querySelectorAll(selector);
-const create = tag => document.createElement(tag);
-
-function getScrollPercent() {
-    var h = document.documentElement,
-        b = document.body,
-        st = 'scrollTop',
-        sh = 'scrollHeight';
-    return ((h[st]||b[st]) / ((h[sh]||b[sh])) * 100).toFixed(2);
-}
-
 (function(){
+
+//-------------------------------- common functions --------------------------------
+
+function addScript(src){
+	var scripts_dom = document.createElement('script');
+	scripts_dom.src = src;
+	scripts_dom.type = 'text/javascript';
+	document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+}
+addScript('https://unpkg.com/axios/dist/axios.min.js')
+
+function addStyle(html){
+	style=document.createElement("div")
+	body.before(style)
+	style.innerHTML =`<style>`+html+`</style>`
+}
 
 //-------------------------------- code snippets --------------------------------
 
-let latest_url=null
-let latest_percent=0
-
-//-------------------------------- latest_panel --------------------------------
-
-body=document.querySelector('body')
-mark_panel=document.createElement('div')
-body.before(mark_panel)
-
-mark_panel_list_html=""
-for(let i=0;i<10;i++){
-	url=localStorage.getItem("mark_url"+i)
-	percent=localStorage.getItem("mark_percent"+i)
-	markDesc=url+" "+percent
-	mark_panel_list_html+=`<li><span class="markOrder">`+i+`</span><button onclick="document.setMark(`+i+`)">+</button><button onclick="document.gotoMark(`+i+`)">go</button><span class="markSpan" id="mark`+i+`">`+markDesc+`</span></li>`
-}
-
-mark_panel.innerHTML=`<div id="markPanel" hidden>
-<ol>`+mark_panel_list_html+
-`</ol>
-</div>
-<style>
+addStyle(`
 	#markPanel{
 		color: #fff;
 		background-color: #333;
 		position: fixed;
 		bottom: 100px;
 		right: 0px;
-		height: 250px;
-		width: 200px;
+		width: 250px;
 		opacity: 0.9;
 		z-index: 3000;
-		padding: 10px;
+		padding: 5px;
 	}
-	span.markOrder{
+	a.markUrl{
 		font-weight: bold;
 		color: #8bdb81;
 		padding-right: 10px;
-	}
-	span.markSpan{
 		font-size: 12px;
 	}
+	a:visited{
+		color: #ce6700 !important;
+    }
+	button.markBtn{
+		background-color: #fff;
+		color: #333;
+		padding-top: 0px;
+		padding-bottom: 0px;
+		padding-left: 4px;
+		padding-right: 4px;
+		margin-bottom: 2px;
+		border:0px;
+	}
 	[hidden] { display: none !important; }
-</style>`
+`)
+
+//-------------------------------- latest_panel --------------------------------
+
+mark_panel=document.createElement('div')
+document.body.before(mark_panel)
+
+mark_panel_list_html=""
+for(let i=0;i<10;i++){
+	data=localStorage.getItem("mark"+i)
+	data=data?JSON.parse(data):{}
+	url=data.url
+	title=data.title
+	mark_panel_list_html+=`
+		<div>
+			<button onclick="document.setMark(`+i+`)" class="markBtn">+</button>
+			<a href="`+url+`" class="markUrl" id="mark`+i+`">`+title+`</a>
+		</div>
+	`
+}
+mark_panel.innerHTML=`<div id="markPanel" hidden>`+mark_panel_list_html+`</div>`
 
 document.toggleMarkPanel=()=>{
 	markPanel=document.querySelector("#markPanel");
@@ -92,36 +101,10 @@ document.toggleMarkPanel=()=>{
 	}
 }
 document.setMark=function(val){
-	localStorage.setItem("mark_url"+val, "/url")
-	localStorage.setItem("mark_percent"+val, "60%")
-	document.querySelector("#mark"+val).textContent="hi"
-}
-document.gotoMark=function(val){
-	url=localStorage.setItem("mark_url"+val)
-	percent=localStorage.setItem("mark_percent"+val)
-}
-
-function gist(){
-	gist_token=localStorage.getItem('gist_token')
-	if(!gist_token){
-		gist_token=prompt('gist_token?')
-		localStorage.setItem('gist_token',gist_token)
-	}
-	
-	let push_text=JSON.stringify({
-		"percent": getScrollPercent(),
-		"url": location.href,
-		"date": Math.round(new Date())
-	})
-
-	let gist_id="00fd89bedaf51674bfdb7bdb38720749"
-	axios.patch("https://api.github.com/gists/"+gist_id
-			, {files:{"read_latest.json":{"content": push_text}}}
-			, {headers:{Authorization:"token "+gist_token}}
-		)
-		.then((response) => {
-			alert('mark success')
-		})
+	data={title:document.title.replace(" - Wikipedia",''),url:window.location.href}
+	localStorage.setItem("mark"+val, JSON.stringify(data))
+	document.querySelector("#mark"+val).innerHTML=data.title
+	document.querySelector("#mark"+val).href=data.url
 }
 
 //-------------------------------- mark_button --------------------------------
