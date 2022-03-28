@@ -62,11 +62,12 @@ addStyle(`
 	button.markBtn{
 		background-color: #fff;
 		color: #333;
-		padding-top: 0px;
-		padding-bottom: 0px;
-		padding-left: 4px;
-		padding-right: 4px;
-		margin-bottom: 2px;
+		padding-top: 4px;
+		padding-bottom: 4px;
+		padding-left: 9px;
+		padding-right: 9px;
+		margin-bottom: 3px;
+		margin-top: 3px;
 		border:0px;
 	}
 	[hidden] { display: none !important; }
