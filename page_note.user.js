@@ -14,134 +14,151 @@
 // @grant        GM_setValue
 // ==/UserScript==
 
-var scripts_dom = document.createElement('script');
-scripts_dom.src = 'https://unpkg.com/axios/dist/axios.min.js';
-scripts_dom.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+(function () {
 
-(function(){
+	//-------------------------------- common functions --------------------------------
 
-// move button dom insert
-body=document.querySelector('body')
-note_button=document.createElement('div')
-document.body.before(note_button)
-note_button.innerHTML=`<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
-<textarea class="notePanel" hidden></textarea>
-<div id="all_notes_panel" hidden>
-	<h1>note</h1>
-	<h1>note</h1>
-</div>
-<style>
-	button.noteBtn {
-		font-weight: bold;
-		color: #fff;
-		background-color: #333;
-		position: fixed;
-		bottom: 0px;
-		right: 50px;
-		width: 50px;
-		height: 50px;
-		opacity: 0.8;
-		z-index: 3000;
+	function addScript(src) {
+		var scripts_dom = document.createElement('script');
+		scripts_dom.src = src;
+		scripts_dom.type = 'text/javascript';
+		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
-	div#all_notes_panel pre{
-		color: #ddd;
-	}
-	div#all_notes_panel{
-		color: #ddd;
-		background-color: #333;
-		padding-top: 42px;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-bottom: 10px;
-		z-index: 3000;
-	}
-	textarea.notePanel{
-		font-weight: bold;
-		color: #fff;
-		background-color: #333;
-		position: fixed;
-		bottom: 50px;
-		right: 0px;
-		left: 0px;
-		top: 50px;
-		opacity: 0.9;
-		z-index: 3000;
-		padding: 30px;
-	}
-	[hidden] { display: none !important; }
-	//div#mw-head, div#mw-panel{display: none !important;}
-</style>`
+	addScript('https://unpkg.com/axios/dist/axios.min.js')
 
-// hide/show functions
-document.hidePanel=()=>{
-	panel=document.querySelector("textarea.notePanel");
-	if(!panel.hidden){
-		text=panel.value;
-		localStorage.setItem("note_"+location.href,text)
-		panel.hidden=true
+	function addStyle(html) {
+		style = document.createElement("div")
+		document.body.before(style)
+		style.innerHTML = `<style>` + html + `</style>`
 	}
-}
-document.showPanel=()=>{
-	panel=document.querySelector("textarea.notePanel");
-	if(panel.hidden){
-		text=localStorage.getItem("note_"+location.href)
-		panel.value=text;
-		panel.hidden=false
+
+	//-------------------------------- code snippets --------------------------------
+
+	// dom insert
+	note_dom = document.createElement('div')
+	document.body.before(note_dom)
+	note_dom.innerHTML = `
+		<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
+		<textarea class="notePanel" hidden></textarea>
+		<div id="all_notes_panel" hidden>
+			<div id="allNotes"></div>
+			<table id="history_table">
+			</table>
+			<button id="note_history_prev" class="pagiBtn">\<</button>
+			<button id="note_history_next" class="pagiBtn">\></button>
+			<input id="note_history_input" type="text" value="1" size="3">
+			<button id="note_history_go" class="pagiBtn">go</button>
+			<button id="booksNoteUpdateBtn" class="pagiBtn" onclick="document.toggleNotePanle()">update</button>
+		</div>`
+
+	addStyle(`
+		button.noteBtn {
+			font-weight: bold;
+			color: #fff;
+			background-color: #333;
+			position: fixed;
+			bottom: 0px;
+			right: 50px;
+			width: 50px;
+			height: 50px;
+			opacity: 0.8;
+			z-index: 3000;
+		}
+		div#all_notes_panel pre{
+			color: #ddd;
+		}
+		div#all_notes_panel{
+			color: #ddd;
+			background-color: #333;
+			padding-top: 42px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 10px;
+			z-index: 3000;
+		}
+		textarea.notePanel{
+			font-weight: bold;
+			color: #fff;
+			background-color: #333;
+			position: fixed;
+			bottom: 50px;
+			right: 0px;
+			left: 0px;
+			top: 50px;
+			opacity: 0.9;
+			z-index: 3000;
+			padding: 30px;
+		}
+		[hidden] { display: none !important; }
+		//div#mw-head, div#mw-panel{display: none !important;}
+	`)
+
+	// hide/show functions
+	document.hidePanel = () => {
+		panel = document.querySelector("textarea.notePanel");
+		if (!panel.hidden) {
+			text = panel.value;
+			localStorage.setItem("note_" + location.href, text)
+			panel.hidden = true
+		}
 	}
-}
-
-// note event
-
-document.toggleAllNotesPanel=()=>{
-	all_notes_panel=document.querySelector("#all_notes_panel");
-	if(all_notes_panel.hidden){
-		html=``
-		for(i=0;i<localStorage.length;i++){
-			key=localStorage.key(i)
-			if (key.substr(0,5)=="note_"){
-				url=new URL(key.substring(5))
-				note=localStorage.getItem(key)
-				if(!note)
-					continue
-				html+=`<a href="`+url.href+`" style="color: #8bdb81; font-weight: bold">`+url.pathname+`</a><pre>`+note+`</pre><hr>`
+	document.showPanel = () => {
+		panel = document.querySelector("textarea.notePanel");
+		if (panel.hidden) {
+			text = localStorage.getItem("note_" + location.href)
+			panel.value = text;
+			panel.hidden = false
+		}
+	}
+	document.toggleAllNotesPanel = () => {
+		all_notes_panel = document.querySelector("#all_notes_panel");
+		if (all_notes_panel.hidden) {
+			html = ``
+			for (i = 0; i < localStorage.length; i++) {
+				key = localStorage.key(i)
+				if (key.substr(0, 5) == "note_") {
+					url = new URL(key.substring(5))
+					note = localStorage.getItem(key)
+					if (!note)
+						continue
+					html += `<a href="` + url.href + `" style="color: #8bdb81; font-weight: bold">` + url.pathname + `</a><pre>` + note + `</pre><hr>`
+				}
 			}
+			noteList = document.querySelector("#allNotes")
+			noteList.innerHTML = html
+			all_notes_panel.hidden = false
+		} else {
+			all_notes_panel.hidden = true
 		}
-		html+=`<h1>read note status</h1>`
-		all_notes_panel.innerHTML=html
-		all_notes_panel.hidden=false
-	}else{
-		all_notes_panel.hidden=true
 	}
-}
-document.toggleNotePanle=()=>{
-	// all_notes_panel
-	if(document.documentElement["scrollTop"]==0){
-		document.toggleAllNotesPanel()
-	}else{
-		// notePanel
-		note_panel=document.querySelector("textarea.notePanel");
-		if(note_panel.hidden)
-			document.showPanel()
-		else
-			document.hidePanel()
-	}
-}
-
-// focus shortcut
-document.addEventListener("keydown", function(event) {
-	panel=document.querySelector("textarea.notePanel");
-	if (event.ctrlKey && event.altKey && event.key=="e"){
-		if(document.documentElement["scrollTop"]==0){
+	document.toggleNotePanle = () => {
+		// all_notes_panel
+		if (document.documentElement["scrollTop"] == 0) {
 			document.toggleAllNotesPanel()
-		}else{
-			document.showPanel()
-			panel.focus()
+		} else {
+			// notePanel
+			note_panel = document.querySelector("textarea.notePanel");
+			if (note_panel.hidden)
+				document.showPanel()
+			else
+				document.hidePanel()
 		}
-	}else if(event.key=="Escape"){
-		document.hidePanel()
-		panel.blur()
 	}
-});
+
+	// C-A-e / Esc
+	document.addEventListener("keydown", function (event) {
+		panel = document.querySelector("textarea.notePanel");
+		if (event.ctrlKey && event.altKey && event.key == "e") {
+			if (document.documentElement["scrollTop"] == 0) {
+				document.toggleAllNotesPanel()
+			} else {
+				document.showPanel()
+				panel.focus()
+			}
+		} else if (event.key == "Escape") {
+			document.hidePanel()
+			panel.blur()
+		}
+	});
 
 })();

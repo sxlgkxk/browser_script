@@ -75,7 +75,9 @@ class _Object{
 class Three{
 	/*
 		1. 功能说明
-			新建3d dom
+			建立一个32x32x32的立方体, 对外接口能通过操纵Objects来操作映射到的3d对象
+
+			封装keyboard/mouse控制
 		
 		2. 函数
 			constructor : 初始化, 新建dom
@@ -121,8 +123,20 @@ class Three{
 		// Camera
 		this.Camera = new THREE.PerspectiveCamera( 90, this.Config.canvasWidth / this.Config.canvasHeight, 0.1, 1000 );
 
+		// Objects
 		this._Objects=[]
+
+		// Map
 		this.setMap()
+
+		window.addEventListener('click', (e) => {
+			this.getDom().focus()
+			this.getDom().setAttribute('tabindex','0')
+		});
+
+		this.getDom().addEventListener('keydown', (e) => {
+			console.log(e.key)
+		})
 	}
 
 	run() {

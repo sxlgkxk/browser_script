@@ -28,7 +28,6 @@
 
 4. 补充说明
 
-
 */
 
 (function(){
@@ -50,6 +49,9 @@ runFunc(function() {
 	// 获取dom
 	three=new Three()
 	dom=three.getDom()
+		dom.addEventListener('keydown', (e) => {
+			console.log(23);
+		});
 
 	// 插入dom
 	container=document.querySelector('#three_container')
@@ -57,6 +59,8 @@ runFunc(function() {
 	container.before(dom);
 
 	// 设置自适应大小
+
+	// gist相关
 
 	// 定制3d空间
 	objects=[

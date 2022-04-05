@@ -32,15 +32,22 @@ function move() {
 		if(speed_cnt==0)
 			window.scrollBy(0, speed);
 		if((window.innerHeight + window.scrollY) +5 >= document.body.scrollHeight){
-			if (!entering_nextpage){
-				entering_nextpage=true
-				setTimeout(()=>{
-					let next_dom=document.querySelector('body > div.mainContainer.clearfix > div.chapter-detail > div.container.full > div.control-group > a.chapter-direction.nextChapter')
-					if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
-					if(location.href+'#'!=next_dom.href)
-						location.href=next_dom.href
-				}, 1000*60)
-			}
+			notepanel = document.querySelector("textarea.notePanel");
+			if (!notepanel || notepanel.hidden)
+				if (!entering_nextpage){
+					entering_nextpage=true
+					setTimeout(()=>{
+						let next_dom=document.querySelector('body > div.mainContainer.clearfix > div.chapter-detail > div.container.full > div.control-group > a.chapter-direction.nextChapter')
+						if(!next_dom) next_dom=document.querySelector('#content-wrapper > section > div > div > div.col-md-8.col-xs-12.section-left > div.content.wl > div > div.text-right > a')
+						if(location.href+'#'!=next_dom.href){
+							setInterval(()=>{
+								notepanel = document.querySelector("textarea.notePanel");
+								if (!notepanel || notepanel.hidden)
+									location.href=next_dom.href
+							},1000*3)
+						}
+					}, 1000*60)
+				}
 		}
 		requestAnimationFrame(move);
 	}
