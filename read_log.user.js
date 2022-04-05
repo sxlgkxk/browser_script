@@ -296,8 +296,9 @@ function setHistoryTable(page){
 	end=Math.min(start+history_pageSize, history_list.length)
 
 	for(i=start;i<end;i++){
+		day=new Date(history_list[i].date).getDate()
 		history_table.innerHTML+=`<tr>
-			<td class="historyDay`+(new Date().getDate())+`">`+getHistoryDateStr(history_list[i].date)+`</td>
+			<td class="historyDay`+day+`">`+getHistoryDateStr(history_list[i].date)+`</td>
 			<td><a href="`+history_list[i].url+`">`+history_list[i].title+`</a></td>
 		</tr>`
 	}
