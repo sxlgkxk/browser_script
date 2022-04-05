@@ -257,6 +257,12 @@ function log(){
 	uuid=getUuid()
 	date=getDateStr()
 	updateLocalLog(uuid, date)
+
+	lastGistUpdateDate=localStorage.getItem('lastGistUpdateDate')
+	if (!lastGistUpdateDate || lastGistUpdateDate!=date){
+		updateGist()
+		localStorage.setItem('lastGistUpdateDate', date)
+	}
 	
 	refreshHeatmap()
 }
