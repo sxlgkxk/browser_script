@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         kibana
-// @include      *xiaoice-k8s-kibana.xiaoice.com*
-// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/kibana.user.js
-// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/kibana.user.js
+// @name 	   	 wikipedia
+// @include      **
+// @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
+// @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
 // @version      0.1
-// @description  kibana extension
+// @description  wikipedia extension
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
 // @icon         http://sxlgkxk.github.io/im/avatar.jpg
@@ -16,7 +16,10 @@
 // ==/UserScript==
 
 (function(){
-
-	console.log("hi")
-
+	function toggleSidebar(){
+		let sidebar=document.querySelector('#mw-panel')
+		sidebar.hidden=!sidebar.hidden
+	}
+	document.querySelector('#mw-head').addEventListener('click',toggleSidebar)
+	toggleSidebar()
 })();
