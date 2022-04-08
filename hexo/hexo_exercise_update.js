@@ -1,4 +1,16 @@
 (function () {
+	function getDateStr(date = null) {
+		date = date ? date : new Date()
+		year = String(date.getFullYear()).substring(2, 4)
+		month = String(date.getMonth() + 1).padStart(2, '0')
+		day = String(date.getDate()).padStart(2, '0')
+		return year + month + day
+	}
+	function addStyle(html) {
+		style = document.createElement("div")
+		document.body.before(style)
+		style.innerHTML = `<style>` + html + `</style>`
+	}
 	async function gist_get_async(gist_id, filename) {
 		response = await axios.get("https://api.github.com/gists/" + gist_id)
 		data = response.data
@@ -23,7 +35,7 @@
 	}
 
 	updateBtn = document.querySelector('#exerciseUpdateBtn')
-	document.updateExerciseGist=function updateGist() {
+	document.updateExerciseGist = function updateGist() {
 		gist_id = "ef99f4c2c10980f092768c3d5c40a05d"
 		filename = "exercise_log.json"
 
@@ -58,8 +70,8 @@
 		log[nowStr] = count
 		localStorage.setItem('exlog', JSON.stringify(log))
 
-		lastGistUpdateDate=localStorage.getItem('lastExerciseGistUpdateDate')
-		if (!lastGistUpdateDate || lastGistUpdateDate!=date){
+		lastGistUpdateDate = localStorage.getItem('lastExerciseGistUpdateDate')
+		if (!lastGistUpdateDate || lastGistUpdateDate != date) {
 			document.updateExerciseGist()
 			localStorage.setItem('lastExerciseGistUpdateDate', nowStr)
 		}
@@ -107,7 +119,6 @@
 		}
 		/* Arrow */
 		.select::after {
-		content: '\25BC';
 		position: absolute;
 		top: 0;
 		right: 0;
