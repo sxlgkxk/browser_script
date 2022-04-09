@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name 	   	 wikipedia
-// @include      **
+// @include      *wikipedia*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
