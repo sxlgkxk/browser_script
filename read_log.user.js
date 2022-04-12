@@ -46,9 +46,11 @@ function getScrollPercent() {
 
 function getGistToken(){
 	gist_token=localStorage.getItem('gist_token')
-	if(!gist_token){
+	if (gist_token != null && gist_token.length > 10) {
 		gist_token=prompt('gist_token?')
-		localStorage.setItem('gist_token',gist_token)
+		if(gist_token){
+			localStorage.setItem('gist_token',gist_token)
+		}
 	}
 	return gist_token
 }
