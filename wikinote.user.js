@@ -90,7 +90,7 @@
 	head=document.querySelector('#firstHeading')
 	dom = document.createElement("div")
 	dom.innerHTML='null'
-	dom.style.cssText = 'border: 1px solid #ccc; padding: 5px; margin: 5px;'
+	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 15px; margin: 5px;'
 	head.before(dom)
 	wikinote=localStorage.getItem('wikinote')
 	wikinote=wikinote?JSON.parse(wikinote):[]

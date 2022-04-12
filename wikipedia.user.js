@@ -24,9 +24,15 @@
 	document.querySelector('#mw-head').addEventListener('click',toggleSidebar)
 	toggleSidebar()
 
-	// move category up
+	// random page
 	head=document.querySelector('#firstHeading')
-	category=document.querySelector('#mw-normal-catlinks')
+	dom = document.createElement("div")
+	dom.innerHTML='<a href="#">random</a>, <span id="wikiTimer">13:0</span>'
+	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 5px; margin: 5px;text-align: center;'
+	head.before(dom)
+
+	// move category up
+	category=document.querySelector('#mw-normal-catlinks').firstElementChild.nextElementSibling
 	head.before(category)
 
 })();
