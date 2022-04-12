@@ -16,10 +16,17 @@
 // ==/UserScript==
 
 (function(){
+	// toggle sidebar
 	function toggleSidebar(){
 		let sidebar=document.querySelector('#mw-panel')
 		sidebar.hidden=!sidebar.hidden
 	}
 	document.querySelector('#mw-head').addEventListener('click',toggleSidebar)
 	toggleSidebar()
+
+	// move category up
+	head=document.querySelector('#firstHeading')
+	category=document.querySelector('#mw-normal-catlinks')
+	head.before(category)
+
 })();

@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name 	   	 wikipedia
+// @name 	   	 wikinote
 // @include      *wikipedia*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/wikipedia.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
 // @version      0.1
-// @description  wikipedia extension
+// @description  wikipedia note
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
 // @icon         http://sxlgkxk.github.io/im/avatar.jpg
@@ -14,6 +14,11 @@
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
+/*
+1. 代码功能
+	添加对每个wiki词条的一句话评语
+
+*/
 
 (function () {
 
