@@ -19,20 +19,66 @@
 	// toggle sidebar
 	function toggleSidebar(){
 		let sidebar=document.querySelector('#mw-panel')
-		sidebar.hidden=!sidebar.hidden
+		if(sidebar)
+			sidebar.hidden=!sidebar.hidden
 	}
-	document.querySelector('#mw-head').addEventListener('click',toggleSidebar)
+	_head=document.querySelector('#mw-head')
+	if(_head)
+		_head.addEventListener('click',toggleSidebar)
 	toggleSidebar()
 
 	// random page
 	head=document.querySelector('#firstHeading')
 	dom = document.createElement("div")
-	dom.innerHTML='<a href="#">random</a>, <span id="wikiTimer">13:0</span>'
-	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 5px; margin: 5px;text-align: center;'
+	dom.innerHTML=""
+	dom.id="randomPage"
+	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 15px; margin: 5px;text-align: center;'
 	head.before(dom)
 
+	let doms=document.querySelectorAll('a')
+	let urlSet=new Set()
+	for(let dom of doms){
+		let url=dom.href
+		if(url.match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki/)){
+			if(url.match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki\/.*?([:\(#]|Main_Page|undefined)+.*?/))
+				continue
+			if(url == location.href)
+				continue
+			urlSet.add(url)
+		}
+	}
+	let randomUrls=Array.from(urlSet)
+	randomUrls=randomUrls.sort(()=>Math.random()-0.5).slice(0,3)
+	for(let url of randomUrls){
+		title=url.match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki\/(.*)/)[2]
+		console.log(title)
+		dom.innerHTML+='<a href="'+url+'">'+title+'</a><br>'
+	}
+
 	// move category up
-	category=document.querySelector('#mw-normal-catlinks').firstElementChild.nextElementSibling
-	head.before(category)
+	category=document.querySelector('#mw-normal-catlinks')
+	if(category){
+		category=category.firstElementChild.nextElementSibling
+		head.before(category)
+	}
+
+	// move see_also up: not do-able
+
+
+	// style
+	function addStyle(html) {
+		style = document.createElement("div")
+		document.body.before(style)
+		style.innerHTML = `<style>` + html + `</style>`
+	}
+	addStyle(`
+		table.nowraplinks.mw-collapsible.navbox-inner.mw-made-collapsible{
+			border: 10px solid #8bdb81 !important;
+		}
+		#See_also{
+			background-color: #8bdb81 !important;
+		}
+	`)
+
 
 })();
