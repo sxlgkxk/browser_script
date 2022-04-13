@@ -133,7 +133,7 @@
 	}
 	document.toggleNotePanle = () => {
 		// all_notes_panel
-		if (document.documentElement["scrollTop"] == 0) {
+		if (document.documentElement["scrollTop"] == 0 && ! (window.innerHeight + window.scrollY) >= document.body.scrollHeight){
 			document.toggleAllNotesPanel()
 		} else {
 			// notePanel
