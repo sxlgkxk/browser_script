@@ -98,14 +98,14 @@
 		panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			text = panel.value;
-			localStorage.setItem("note_" + location.href, text)
+			localStorage.setItem("note_" + location.pathname, text)
 			panel.hidden = true
 		}
 	}
 	document.showPanel = () => {
 		panel = document.querySelector("textarea.notePanel");
 		if (panel.hidden) {
-			text = localStorage.getItem("note_" + location.href)
+			text = localStorage.getItem("note_" + location.pathname)
 			panel.value = text;
 			panel.hidden = false
 		}
@@ -117,7 +117,7 @@
 			for (i = 0; i < localStorage.length; i++) {
 				key = localStorage.key(i)
 				if (key.substr(0, 5) == "note_") {
-					url = new URL(key.substring(5))
+					url = new URL(location.origin+key.substring(5))
 					note = localStorage.getItem(key)
 					if (!note)
 						continue
@@ -133,7 +133,7 @@
 	}
 	document.toggleNotePanle = () => {
 		// all_notes_panel
-		if (document.documentElement["scrollTop"] == 0) {
+		if (document.documentElement["scrollTop"] == 0 && ! (window.innerHeight + window.scrollY) >= document.body.scrollHeight){
 			document.toggleAllNotesPanel()
 		} else {
 			// notePanel
