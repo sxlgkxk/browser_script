@@ -23,5 +23,13 @@
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
 	addScript('https://unpkg.com/vconsole@latest/dist/vconsole.min.js')
-	var vConsole = new window.VConsole({ theme: 'dark' });
+
+	let wait_vconsole_interval=setInterval(function(){
+		if (!VConsole){
+			console.log("waiting vconsole")
+			return
+		}
+		clearInterval(wait_vconsole_interval)
+		vConsole = new window.VConsole({ theme: 'dark' });
+	},200)
 })();
