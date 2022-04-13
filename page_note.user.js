@@ -117,7 +117,7 @@
 			for (i = 0; i < localStorage.length; i++) {
 				key = localStorage.key(i)
 				if (key.substr(0, 5) == "note_") {
-					url = new URL(key.substring(5))
+					url = new URL(location.host+key.substring(5))
 					note = localStorage.getItem(key)
 					if (!note)
 						continue
