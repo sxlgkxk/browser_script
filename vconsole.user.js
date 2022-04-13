@@ -25,7 +25,7 @@
 	addScript('https://unpkg.com/vconsole@latest/dist/vconsole.min.js')
 
 	let wait_vconsole_interval=setInterval(function(){
-		if (!VConsole){
+		if (!window.VConsole){
 			console.log("waiting vconsole")
 			return
 		}
