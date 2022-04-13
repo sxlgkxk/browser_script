@@ -98,14 +98,14 @@
 		panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			text = panel.value;
-			localStorage.setItem("note_" + location.href, text)
+			localStorage.setItem("note_" + location.pathname, text)
 			panel.hidden = true
 		}
 	}
 	document.showPanel = () => {
 		panel = document.querySelector("textarea.notePanel");
 		if (panel.hidden) {
-			text = localStorage.getItem("note_" + location.href)
+			text = localStorage.getItem("note_" + location.pathname)
 			panel.value = text;
 			panel.hidden = false
 		}
