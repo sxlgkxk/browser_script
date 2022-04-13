@@ -18,27 +18,27 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-(function(){
+(function () {
 
-//-------------------------------- common functions --------------------------------
+	//-------------------------------- common functions --------------------------------
 
-function addScript(src){
-	var scripts_dom = document.createElement('script');
-	scripts_dom.src = src;
-	scripts_dom.type = 'text/javascript';
-	document.getElementsByTagName('head')[0].appendChild(scripts_dom);
-}
-addScript('https://unpkg.com/axios/dist/axios.min.js')
+	function addScript(src) {
+		var scripts_dom = document.createElement('script');
+		scripts_dom.src = src;
+		scripts_dom.type = 'text/javascript';
+		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+	}
+	addScript('https://unpkg.com/axios/dist/axios.min.js')
 
-function addStyle(html){
-	style=document.createElement("div")
-	document.body.before(style)
-	style.innerHTML =`<style>`+html+`</style>`
-}
+	function addStyle(html) {
+		style = document.createElement("div")
+		document.body.before(style)
+		style.innerHTML = `<style>` + html + `</style>`
+	}
 
-//-------------------------------- code snippets --------------------------------
+	//-------------------------------- code snippets --------------------------------
 
-addStyle(`
+	addStyle(`
 	#markPanel{
 		color: #fff;
 		background-color: #333;
@@ -59,7 +59,7 @@ addStyle(`
 	a:visited{
 		color: #ce6700 !important;
     }
-	button.markBtn{
+	button.markBtn, button.highlightBtn{
 		background-color: #fff;
 		color: #333;
 		padding-top: 4px;
@@ -73,49 +73,55 @@ addStyle(`
 	[hidden] { display: none !important; }
 `)
 
-//-------------------------------- latest_panel --------------------------------
+	//-------------------------------- latest_panel --------------------------------
 
-mark_panel=document.createElement('div')
-document.body.before(mark_panel)
+	mark_panel = document.createElement('div')
+	document.body.before(mark_panel)
 
-mark_panel_list_html=""
-for(let i=0;i<10;i++){
-	data=localStorage.getItem("mark"+i)
-	data=data?JSON.parse(data):{}
-	url=data.url
-	title=data.title
-	mark_panel_list_html+=`
+	mark_panel_list_html = ""
+	for (let i = 0; i < 5; i++) {
+		data = localStorage.getItem("mark" + i)
+		data = data ? JSON.parse(data) : {}
+		url = data.url
+		title = data.title
+		mark_panel_list_html += `
 		<div>
-			<button onclick="document.setMark(`+i+`)" class="markBtn">+</button>
-			<a href="`+url+`" class="markUrl" id="mark`+i+`">`+title+`</a>
+			<button onclick="document.setMark(`+ i + `)" class="markBtn">+</button>
+			<a href="`+ url + `" class="markUrl" id="mark` + i + `">` + title + `</a>
 		</div>
 	`
-}
-mark_panel.innerHTML=`<div id="markPanel" hidden>`+mark_panel_list_html+`</div>`
-
-document.toggleMarkPanel=()=>{
-	markPanel=document.querySelector("#markPanel");
-	if(markPanel.hidden){
-		markPanel.hidden=false
-	}else{
-		markPanel.hidden=true
 	}
-}
-document.setMark=function(val){
-	data={title:document.title.replace(" - Wikipedia",''),url:window.location.href}
-	localStorage.setItem("mark"+val, JSON.stringify(data))
-	document.querySelector("#mark"+val).innerHTML=data.title
-	document.querySelector("#mark"+val).href=data.url
-}
 
-//-------------------------------- mark_button --------------------------------
+	highlight_html = `<button class="highlightBtn" onclick="document.promptHighlight()">highlight</button>`
 
-body=document.querySelector('body')
-mark_button=document.createElement('button')
-document.body.before(mark_button)
+	mark_panel.innerHTML = `<div id="markPanel" hidden>`
+		+ mark_panel_list_html
+		+ highlight_html
+		+ `</div>`
 
-// move button style
-mark_button.innerHTML=`<style>
+	document.toggleMarkPanel = () => {
+		markPanel = document.querySelector("#markPanel");
+		if (markPanel.hidden) {
+			markPanel.hidden = false
+		} else {
+			markPanel.hidden = true
+		}
+	}
+	document.setMark = function (val) {
+		data = { title: document.title.replace(" - Wikipedia", ''), url: window.location.href }
+		localStorage.setItem("mark" + val, JSON.stringify(data))
+		document.querySelector("#mark" + val).innerHTML = data.title
+		document.querySelector("#mark" + val).href = data.url
+	}
+
+	//-------------------------------- mark_button --------------------------------
+
+	body = document.querySelector('body')
+	mark_button = document.createElement('button')
+	document.body.before(mark_button)
+
+	// move button style
+	mark_button.innerHTML = `<style>
 	.float_btn{
 		font-weight: bold;
 		color: #fff;
@@ -128,14 +134,76 @@ mark_button.innerHTML=`<style>
 	}
 </style`
 
-// mark_button
-mark_button.innerHTML+='mark'
-mark_button.id='read_mark_btn'
-mark_button.classList.add("float_btn")
-mark_button.style.bottom='50px'
-mark_button.style.right='50px'
-mark_button.onclick=()=>{
-	document.toggleMarkPanel()
-}
+	// mark_button
+	mark_button.innerHTML += 'mark'
+	mark_button.id = 'read_mark_btn'
+	mark_button.classList.add("float_btn")
+	mark_button.style.bottom = '50px'
+	mark_button.style.right = '50px'
+	mark_button.onclick = () => {
+		document.toggleMarkPanel()
+	}
 
+	//-------------------------------- highlight --------------------------------
+
+	// style
+	function addStyle(html) {
+		style = document.createElement("div")
+		document.body.before(style)
+		style.innerHTML = `<style>` + html + `</style>`
+	}
+	addStyle(`
+		span.highlight{
+			color: #555555; 
+			font-weight:bold; 
+			background-color: #8bdb81;
+		}
+	`)
+
+	function doHighlight(el=document.body) {
+		var keywords=localStorage.getItem("highlight")
+		if (!keywords) return;
+		keywords=JSON.parse(keywords).join()
+
+		var rQuantifiers = /[-\/\\^$*+?.()|[\]{}]/g;
+		keywords = keywords.replace(rQuantifiers, '\\$&').split(',').join('|');
+		var pat = new RegExp('(' + keywords + ')', 'gi');
+		var span = document.createElement('span');
+		// getting all text nodes with a few exceptions
+		var snapElements = document.evaluate(
+			'.//text()[normalize-space() != "" ' +
+			'and not(ancestor::style) ' +
+			'and not(ancestor::script) ' +
+			'and not(ancestor::textarea) ' +
+			'and not(ancestor::code) ' +
+			'and not(ancestor::pre)]',
+			el, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+
+		if (!snapElements.snapshotItem(0)) { return; }  // end execution if not found
+
+		for (var i = 0, len = snapElements.snapshotLength; i < len; i++) {
+			var node = snapElements.snapshotItem(i);
+			// check if it contains the keywords
+			if (pat.test(node.nodeValue)) {
+				// check that it isn't already highlighted
+				if (node.className != "highlight" && node.parentNode.className != "highlight") {
+					// create an element, replace the text node with an element
+					var sp = span.cloneNode(true);
+					sp.innerHTML = node.nodeValue.replace(pat, '<span class="highlight" title="highlight">$1</span>');
+					node.parentNode.replaceChild(sp, node);
+				}
+			}
+		}
+	}
+	doHighlight();
+
+	function promptHighlight(){
+		text=prompt("请输入需要高亮的关键词")
+		if(text){
+			keywords=[text]
+			localStorage.setItem("highlight", JSON.stringify(keywords))
+			doHighlight()
+		}
+	}
+	document.promptHighlight= promptHighlight
 })();
