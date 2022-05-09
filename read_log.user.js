@@ -281,10 +281,10 @@
 			z-index: 3000;
 		}
 	`)
-	wpm_dom = document.createElement('div')
-	document.body.before(wpm_dom)
-	wpm_dom.innerHTML = `<canvas id="wpmCanvas" width="50px" height="50px"></canvas>`
-	let wpmQueue=[0]
+	// wpm_dom = document.createElement('div')
+	// document.body.before(wpm_dom)
+	// wpm_dom.innerHTML = `<canvas id="wpmCanvas" width="50px" height="50px"></canvas>`
+	// let wpmQueue=[0]
 
 	function drawWpmCanvas(){
 		// console.log('draw')
@@ -310,14 +310,14 @@
 		ctx.fillText(wpmQueue[wpmQueue.length-1], 5, 21);
 
 	}
-	drawWpmCanvas()
+	// drawWpmCanvas()
 
-	let wpmArea = document.createElement("div")
-	wpmArea.id="wpmArea"
-	wpmArea.classList.add("wpmArea")
-	wpmArea.style.top = "0px"
-	wpmArea.style.height = "0px"
-	document.body.before(wpmArea)
+	// let wpmArea = document.createElement("div")
+	// wpmArea.id="wpmArea"
+	// wpmArea.classList.add("wpmArea")
+	// wpmArea.style.top = "0px"
+	// wpmArea.style.height = "0px"
+	// document.body.before(wpmArea)
 	let forceUpdateWpmArea=false;
 	
 	let lastStartTime=new Date().getTime()
@@ -340,15 +340,15 @@
 		words_cnt=countWords(_lineStart, lineEnd)
 		// console.log(_lineStart, lineEnd, words_cnt)
 		wpmQueue[wpmQueue.length-1]=Math.round(words_cnt/((new Date().getTime()-lastStartTime)/1000/60))
-		drawWpmCanvas()
+		// drawWpmCanvas()
 	}
-	let wpmInterval=setInterval(updateWpmArea, 1000)
+	// let wpmInterval=setInterval(updateWpmArea, 1000)
 
-	document.querySelector('canvas#wpmCanvas').onclick = function(){
-		forceUpdateWpmArea=true;
-		updateWpmArea()
-		updateWpmArea()
-	}
+	// document.querySelector('canvas#wpmCanvas').onclick = function(){
+	// 	forceUpdateWpmArea=true;
+	// 	updateWpmArea()
+	// 	updateWpmArea()
+	// }
 
 	function countWords(lineStart, lineEnd){
 		let items=document.querySelector('div.chapterContent')

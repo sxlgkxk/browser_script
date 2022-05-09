@@ -1,7 +1,6 @@
 // ==UserScript==
 // @name         read auto scroll
-// @include      http://readonlinefreebook.com/*
-// @include      https://readonlinefreebook.com/*
+// @include      *
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_auto_scroll.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
