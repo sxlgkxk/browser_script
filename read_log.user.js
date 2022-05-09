@@ -1,7 +1,6 @@
 // ==UserScript==
 // @name         read_log
-// @include      http://readonlinefreebook.com/*
-// @include      https://readonlinefreebook.com/*
+// @include      *
 // @include      *wikipedia.org*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
