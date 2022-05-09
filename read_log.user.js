@@ -351,7 +351,9 @@
 	}
 
 	function countWords(lineStart, lineEnd){
-		let items=document.querySelector('div.chapterContent').querySelectorAll('p')
+		let items=document.querySelector('div.chapterContent')
+		if(!items) return 0;
+		items=items.querySelectorAll('p')
 		let words_cnt=0;
 		for(let item of items){
 			let top=item.offsetTop;
