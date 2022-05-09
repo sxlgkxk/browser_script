@@ -235,16 +235,16 @@
 
 	//-------------------------------- statistics --------------------------------
 
-	chapter_dom = document.querySelector("div.chapter-detail")
-	if (!chapter_dom) chapter_dom = document.body
-	heatmap_panel = document.createElement("div")
-	chapter_dom.before(heatmap_panel)
-	heatmap_panel.innerHTML = `<canvas id="heatmap" width="` + canvasWidth + `" height="` + canvasHeight + `"></canvas>`
+	// chapter_dom = document.querySelector("div.chapter-detail")
+	// if (!chapter_dom) chapter_dom = document.body
+	// heatmap_panel = document.createElement("div")
+	// chapter_dom.before(heatmap_panel)
+	// heatmap_panel.innerHTML = `<canvas id="heatmap" width="` + canvasWidth + `" height="` + canvasHeight + `"></canvas>`
 
-	canvas = document.querySelector("canvas#heatmap")
-	canvas.onclick = updateGist
+	// canvas = document.querySelector("canvas#heatmap")
+	// canvas.onclick = updateGist
 
-	refreshHeatmap()
+	// refreshHeatmap()
 
 	//-------------------------------- wpm --------------------------------
 
