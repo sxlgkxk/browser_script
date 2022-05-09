@@ -6,7 +6,7 @@
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
-// @version      0.1
+// @version      0.2
 // @description  read log
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
