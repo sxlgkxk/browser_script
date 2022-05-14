@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         read_log
-// @include      http://readonlinefreebook.com/*
-// @include      https://readonlinefreebook.com/*
+// @include      *
 // @include      *wikipedia.org*
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/read_log.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
-// @version      0.1
+// @version      0.2
 // @description  read log
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
@@ -236,16 +235,16 @@
 
 	//-------------------------------- statistics --------------------------------
 
-	chapter_dom = document.querySelector("div.chapter-detail")
-	if (!chapter_dom) chapter_dom = document.body
-	heatmap_panel = document.createElement("div")
-	chapter_dom.before(heatmap_panel)
-	heatmap_panel.innerHTML = `<canvas id="heatmap" width="` + canvasWidth + `" height="` + canvasHeight + `"></canvas>`
+	// chapter_dom = document.querySelector("div.chapter-detail")
+	// if (!chapter_dom) chapter_dom = document.body
+	// heatmap_panel = document.createElement("div")
+	// chapter_dom.before(heatmap_panel)
+	// heatmap_panel.innerHTML = `<canvas id="heatmap" width="` + canvasWidth + `" height="` + canvasHeight + `"></canvas>`
 
-	canvas = document.querySelector("canvas#heatmap")
-	canvas.onclick = updateGist
+	// canvas = document.querySelector("canvas#heatmap")
+	// canvas.onclick = updateGist
 
-	refreshHeatmap()
+	// refreshHeatmap()
 
 	//-------------------------------- wpm --------------------------------
 
@@ -281,10 +280,10 @@
 			z-index: 3000;
 		}
 	`)
-	wpm_dom = document.createElement('div')
-	document.body.before(wpm_dom)
-	wpm_dom.innerHTML = `<canvas id="wpmCanvas" width="50px" height="50px"></canvas>`
-	let wpmQueue=[0]
+	// wpm_dom = document.createElement('div')
+	// document.body.before(wpm_dom)
+	// wpm_dom.innerHTML = `<canvas id="wpmCanvas" width="50px" height="50px"></canvas>`
+	// let wpmQueue=[0]
 
 	function drawWpmCanvas(){
 		// console.log('draw')
@@ -310,14 +309,14 @@
 		ctx.fillText(wpmQueue[wpmQueue.length-1], 5, 21);
 
 	}
-	drawWpmCanvas()
+	// drawWpmCanvas()
 
-	let wpmArea = document.createElement("div")
-	wpmArea.id="wpmArea"
-	wpmArea.classList.add("wpmArea")
-	wpmArea.style.top = "0px"
-	wpmArea.style.height = "0px"
-	document.body.before(wpmArea)
+	// let wpmArea = document.createElement("div")
+	// wpmArea.id="wpmArea"
+	// wpmArea.classList.add("wpmArea")
+	// wpmArea.style.top = "0px"
+	// wpmArea.style.height = "0px"
+	// document.body.before(wpmArea)
 	let forceUpdateWpmArea=false;
 	
 	let lastStartTime=new Date().getTime()
@@ -340,18 +339,20 @@
 		words_cnt=countWords(_lineStart, lineEnd)
 		// console.log(_lineStart, lineEnd, words_cnt)
 		wpmQueue[wpmQueue.length-1]=Math.round(words_cnt/((new Date().getTime()-lastStartTime)/1000/60))
-		drawWpmCanvas()
+		// drawWpmCanvas()
 	}
-	let wpmInterval=setInterval(updateWpmArea, 1000)
+	// let wpmInterval=setInterval(updateWpmArea, 1000)
 
-	document.querySelector('canvas#wpmCanvas').onclick = function(){
-		forceUpdateWpmArea=true;
-		updateWpmArea()
-		updateWpmArea()
-	}
+	// document.querySelector('canvas#wpmCanvas').onclick = function(){
+	// 	forceUpdateWpmArea=true;
+	// 	updateWpmArea()
+	// 	updateWpmArea()
+	// }
 
 	function countWords(lineStart, lineEnd){
-		let items=document.querySelector('div.chapterContent').querySelectorAll('p')
+		let items=document.querySelector('div.chapterContent')
+		if(!items) return 0;
+		items=items.querySelectorAll('p')
 		let words_cnt=0;
 		for(let item of items){
 			let top=item.offsetTop;
