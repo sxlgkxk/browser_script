@@ -24,8 +24,9 @@
 		container.before(btn)
 		btn.style.height='50px'
 		btn.onclick=()=>{
-			img=document.querySelector('#__PWS_ROOT__ > div:nth-child(1) > div.appContent > div > div > div > div.Closeup.Module > div > div > div > div > div.m2F.zI7.iyn.Hsu > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div.sLG.zI7.iyn.Hsu > div > div.XiG.zI7.iyn.Hsu > div > div > img').src
-			img=img.replace(/i\.pinimg\.com\/.*?\//, 'i.pinimg.com/345x/')
+			img=document.querySelector('#__PWS_ROOT__ > div:nth-child(1) > div.appContent > div > div > div > div.Closeup.Module > div > div > div > div > div.m2F.zI7.iyn.Hsu > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div.sLG.zI7.iyn.Hsu > div > div.XiG.zI7.iyn.Hsu > div > div > img')
+			if (!img) img=document.querySelector('#__PWS_ROOT__ > div:nth-child(1) > div.appContent > div > div > div > div.Closeup.Module > div > div > div > div > div.m2F.zI7.iyn.Hsu > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div > div.sLG.zI7.iyn.Hsu > div > div.XiG.zI7.iyn.Hsu > div > div > img')
+			img=img.src.replace(/i\.pinimg\.com\/.*?\//, 'i.pinimg.com/345x/')
 
 			btn.style.backgroundColor='#0ca40c'
 			text=`![${location.href}](${img})\n`
