@@ -27,7 +27,8 @@
 		dom.id='sxlgkxk-youtube-container';
 
 		let youtubeId=location.href.match(/v=([^&]+)/)[1];
-		let title=document.querySelector('#container > h1 > yt-formatted-string').innerText.replace('"', "'");
+		// let title=document.querySelector('#container > h1 > yt-formatted-string').innerText.replace('"', "'");
+		let title=document.title.replace('"', "'");
 
 		dom.innerHTML=`<h1>{%ytb ${youtubeId} "${title}" %}</h1>
 			<style>
