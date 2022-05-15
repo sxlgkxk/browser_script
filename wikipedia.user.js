@@ -36,7 +36,7 @@
 	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 15px; margin: 5px;text-align: center;'
 	head.before(dom)
 
-	let doms=document.querySelectorAll('a')
+	let doms=document.querySelector('#bodyContent').querySelectorAll('a')
 	let urlSet=new Set()
 	for(let dom of doms){
 		let url=dom.href
@@ -83,6 +83,53 @@
 		}
 	`)
 
+
+	// -------------------------------- slider --------------------------------
+
+	addStyle(`
+		button.sliderBtn{
+			background-color: #fff;
+			color: #333;
+			padding-top: 4px;
+			padding-bottom: 4px;
+			padding-left: 9px;
+			padding-right: 9px;
+			margin-right: 5px;
+			margin-bottom: 3px;
+			margin-top: 3px;
+			border:0px;
+		}
+	`)
+
+	dom = document.createElement("div")
+	dom.innerHTML=`<button id='sliderStopBtn' class="sliderBtn" onclick="window.sliderRun=!window.sliderRun">toggle</button>`
+		+ `<div id="sliderList"></div>`
+	dom.id="slider"
+	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 15px; margin: 5px;text-align: center;'
+	head.before(dom)
+	window.sliderRun=true;
+	let urlList=Array.from(urlSet).sort((url1,url2)=>url1.localeCompare(url2))
+	let currentPage=0;
+	let pageCapacity=10;
+	console.log(urlList)
+	function setSliderPage(page){
+		let sliderList=document.querySelector('#sliderList')
+		sliderList.innerHTML=""
+		for(let i=page*pageCapacity;i<(page+1)*pageCapacity;i++){
+			if(i>=urlList.length)
+				sliderList.innerHTML+="<br>"
+			else
+				sliderList.innerHTML+='<a href="'+urlList[i]+'">'+urlList[i].match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki\/(.*)/)[2]+'</a><br>'
+		}
+	}
+	setInterval(()=>{
+		currentPage=(currentPage+1);
+		if(currentPage>=urlList.length/pageCapacity)
+			currentPage=0;
+
+		if(window.sliderRun)
+			setSliderPage(currentPage)
+	},1000)
 
 
 })();

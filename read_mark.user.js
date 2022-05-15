@@ -66,6 +66,7 @@
 		padding-bottom: 4px;
 		padding-left: 9px;
 		padding-right: 9px;
+		margin-right: 5px;
 		margin-bottom: 3px;
 		margin-top: 3px;
 		border:0px;
@@ -73,13 +74,14 @@
 	[hidden] { display: none !important; }
 `)
 
-	//-------------------------------- latest_panel --------------------------------
+
+	//-------------------------------- markPanel --------------------------------
 
 	mark_panel = document.createElement('div')
 	document.body.before(mark_panel)
 
 	mark_panel_list_html = ""
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < 10; i++) {
 		data = localStorage.getItem("mark" + i)
 		data = data ? JSON.parse(data) : {}
 		url = data.url
@@ -92,11 +94,10 @@
 	`
 	}
 
-	highlight_html = `<button class="highlightBtn" onclick="document.promptHighlight()">highlight</button>`
-
 	mark_panel.innerHTML = `<div id="markPanel" hidden>`
 		+ mark_panel_list_html
-		+ highlight_html
+		+ `<button class="highlightBtn" onclick="document.promptHighlight()">highlight</button>`
+		+ `<button class="highlightBtn" id="readlaterBtn" onclick="document.addToReadlater()">readlater</button>`
 		+ `</div>`
 
 	document.toggleMarkPanel = () => {
@@ -160,10 +161,10 @@
 		}
 	`)
 
-	function doHighlight(el=document.body) {
-		var keywords=localStorage.getItem("highlight")
+	function doHighlight(el = document.body) {
+		var keywords = localStorage.getItem("highlight")
 		if (!keywords) return;
-		keywords=JSON.parse(keywords).join()
+		keywords = JSON.parse(keywords).join()
 
 		var rQuantifiers = /[-\/\\^$*+?.()|[\]{}]/g;
 		keywords = keywords.replace(rQuantifiers, '\\$&').split(',').join('|');
@@ -197,13 +198,123 @@
 	}
 	doHighlight();
 
-	function promptHighlight(){
-		text=prompt("请输入需要高亮的关键词")
-		if(text){
-			keywords=[text]
+	function promptHighlight() {
+		text = prompt("请输入需要高亮的关键词")
+		if (text) {
+			keywords = [text]
 			localStorage.setItem("highlight", JSON.stringify(keywords))
 			doHighlight()
 		}
 	}
-	document.promptHighlight= promptHighlight
+	document.promptHighlight = promptHighlight
+
+
+	//-------------------------------- readlater --------------------------------
+
+	addStyle(`
+		table#readlater_table {
+			border-collapse: collapse;
+			width: 100%;
+			background-color: #222;
+		}
+		#readlater_table th, #readlater_table td {
+			text-align: left;
+			padding: 8px;
+		}
+		button.pagiBtn{
+			background-color: #333;
+			color: #fff;
+			margin: 4px;
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 9px;
+			padding-bottom: 9px;
+		}
+		button#readlaterBtn.added{
+			background-color: #8bdb81;
+		}
+	`)
+
+	for (let i = 1; i <= 31; i++) {
+		addStyle(`td.readlaterDay` + i + `{background-color: rgba(` + Math.floor(Math.random() * 255) + `,` + Math.floor(Math.random() * 255) + `,` + Math.floor(Math.random() * 255) + `, 0.5);}`)
+	}
+
+	function getReadlaterDateStr(date = null) {
+		date = new Date(date)
+		month = String(date.getMonth() + 1)
+		day = String(date.getDate())
+		return month + "." + day
+	}
+
+	chapter_dom = document.querySelector("div.chapter-detail")
+	if (!chapter_dom) chapter_dom = document.body
+	readlater_panel = document.createElement("div")
+	chapter_dom.before(readlater_panel)
+	readlater_panel.innerHTML = `<div>
+	<table id="readlater_table">
+	</table>
+	<button id="readlater_prev" class="pagiBtn">\<</button>
+	<button id="readlater_next" class="pagiBtn">\></button>
+	<input id="readlater_input" type="text" value="1" size="3">
+	<button id="readlater_go" class="pagiBtn">go</button>
+</div>`
+
+	readlater_data = localStorage.getItem('readlater_data')
+	readlater_data = readlater_data ? JSON.parse(readlater_data) : {}
+	if (readlater_data[location.href]) {
+		document.querySelector("#readlaterBtn").classList.add("added")
+	}
+
+	function addToReadlater() {
+		if (!readlater_data[location.href]) {
+			readlater_data[location.href] = { date: new Date().getTime(), title: document.title.replace(" - Wikipedia", ''), url: location.href }
+			localStorage.setItem('readlater_data', JSON.stringify(readlater_data))
+			btn = document.querySelector('button#readlaterBtn')
+			btn.classList.add('added')
+		} else {
+			delete readlater_data[location.href];
+			localStorage.setItem('readlater_data', JSON.stringify(readlater_data))
+			btn = document.querySelector('button#readlaterBtn')
+			btn.classList.remove('added')
+		}
+		setReadlaterTable(1)
+	}
+	document.addToReadlater = addToReadlater
+
+	function setReadlaterTable(page) {
+		page = page ? page : 1
+		readlater_pageSize = 10
+		readlater_table = document.querySelector("#readlater_table")
+		readlater_table.innerHTML = ""
+		readlater_list = Object.values(readlater_data).sort((a, b) => { return b.date - a.date })
+
+		start = (page - 1) * readlater_pageSize
+		end = Math.min(start + readlater_pageSize, readlater_list.length)
+
+		for (i = start; i < end; i++) {
+			day = new Date(readlater_list[i].date).getDate()
+			readlater_table.innerHTML += `<tr>`
+				// + `<td class="readlaterDay` + day + `">` + getReadlaterDateStr(readlater_list[i].date) + `</td>`
+				+ `<td><a href="` + readlater_list[i].url + `">` + readlater_list[i].title + `</a></td>
+			</tr>`
+		}
+	}
+	setReadlaterTable(1)
+
+	document.querySelector('#readlater_prev').onclick = () => {
+		readlater_page = document.querySelector('#readlater_input').value;
+		setReadlaterTable(--readlater_page);
+		document.querySelector('#readlater_input').value = readlater_page
+	}
+	document.querySelector('#readlater_next').onclick = () => {
+		readlater_page = document.querySelector('#readlater_input').value;
+		setReadlaterTable(++readlater_page);
+		document.querySelector('#readlater_input').value = readlater_page
+	}
+
+	document.querySelector('#readlater_go').onclick = () => {
+		readlater_page = document.querySelector('#readlater_input').value;
+		setReadlaterTable(readlater_page);
+	}
+
 })();
