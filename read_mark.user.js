@@ -57,7 +57,7 @@
 		font-size: 12px;
 	}
 	a:visited{
-		color: #ce6700 !important;
+		color: #f5de19 !important;
     }
 	button.markBtn, button.highlightBtn{
 		background-color: #fff;

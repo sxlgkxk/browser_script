@@ -27,6 +27,7 @@
 		_head.addEventListener('click',toggleSidebar)
 	toggleSidebar()
 
+
 	// random page
 	head=document.querySelector('#firstHeading')
 	dom = document.createElement("div")
@@ -55,12 +56,14 @@
 		dom.innerHTML+='<a href="'+url+'">'+title+'</a><br>'
 	}
 
+
 	// move category up
 	category=document.querySelector('#mw-normal-catlinks')
 	if(category){
 		category=category.firstElementChild.nextElementSibling
 		head.before(category)
 	}
+
 
 	// move see_also up: not do-able
 
@@ -79,6 +82,7 @@
 			background-color: #8bdb81 !important;
 		}
 	`)
+
 
 
 })();
