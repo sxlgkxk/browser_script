@@ -102,12 +102,12 @@
 	`)
 
 	dom = document.createElement("div")
-	dom.innerHTML=`<button id='sliderStopBtn' class="sliderBtn" onclick="window.sliderRun=!window.sliderRun">toggle</button>`
+	dom.innerHTML=`<button id='sliderStopBtn' class="sliderBtn" onclick="document.sliderRun=!document.sliderRun">toggle</button>`
 		+ `<div id="sliderList"></div>`
 	dom.id="slider"
 	dom.style.cssText = 'background-color: #000; color: #ddd; padding: 15px; margin: 5px;text-align: center;'
 	head.before(dom)
-	window.sliderRun=true;
+	document.sliderRun=true;
 	let urlList=Array.from(urlSet).sort((url1,url2)=>url1.localeCompare(url2))
 	let currentPage=0;
 	let pageCapacity=10;
@@ -127,7 +127,7 @@
 		if(currentPage>=urlList.length/pageCapacity)
 			currentPage=0;
 
-		if(window.sliderRun)
+		if(document.sliderRun)
 			setSliderPage(currentPage)
 	},1000)
 
