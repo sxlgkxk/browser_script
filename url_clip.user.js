@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name         url_clip
 // @include      *wikipedia.org*
+// @include      *https://www.bilibili.com/*
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
 // @version      0.1
 // @description  url clip
@@ -21,14 +22,15 @@
 		let title='', imageUrl='';
 		title = document.title.replace('"', "'");
 
-		// if(location.href.startsWith('https://www2.javhdporn.net/video/')) {
-		// 	imageUrl=document.querySelector('head > meta[property="og:image"]').getAttribute('content')
-		// } else {
-		// }
+		if(location.href.startsWith('https://www.bilibili.com/')) {
+			imageUrl=document.querySelector('head > meta[itemprop="thumbnailUrl"]').getAttribute('content')
+		} else {
+		}
 
 		dom.innerHTML = `<span>{%url ${location.href} "${title}" %}</span><br>`
-			// +`<span>${imageUrl}</span><br>`
-			+`<span>{%endurl%}</span>
+		if(imageUrl)
+			dom.innerHTML+=`<span>${imageUrl}</span><br>`
+		dom.innerHTML+=`<span>{%endurl%}</span>
 			<style>
 				#url-hexo-container {
 					width: 100%;
