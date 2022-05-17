@@ -267,6 +267,7 @@
 
 	function addToReadlater() {
 		readlater_data=localStorage.getItem('readlater_data')
+		readlater_data = readlater_data ? JSON.parse(readlater_data) : {}
 		if (!readlater_data[location.href]) {
 			readlater_data[location.href] = { date: new Date().getTime(), title: document.title.replace(" - Wikipedia", ''), url: location.href }
 			localStorage.setItem('readlater_data', JSON.stringify(readlater_data))
