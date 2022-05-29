@@ -133,7 +133,8 @@
 	}
 	document.toggleNotePanle = () => {
 		// all_notes_panel
-		if (document.documentElement["scrollTop"] == 0 && ! (window.innerHeight + window.scrollY) >= document.body.scrollHeight){
+		// if (document.documentElement["scrollTop"] == 0 && ! (window.innerHeight + window.scrollY) >= document.body.scrollHeight){
+		if (document.documentElement["scrollTop"] <= 50){
 			document.toggleAllNotesPanel()
 		} else {
 			// notePanel
@@ -149,7 +150,7 @@
 	document.addEventListener("keydown", function (event) {
 		panel = document.querySelector("textarea.notePanel");
 		if (event.ctrlKey && event.altKey && event.key == "e") {
-			if (document.documentElement["scrollTop"] == 0) {
+			if (document.documentElement["scrollTop"] <=50 ) {
 				document.toggleAllNotesPanel()
 			} else {
 				document.showPanel()
