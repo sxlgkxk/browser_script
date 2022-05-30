@@ -83,7 +83,7 @@ move_button.onclick=()=>{
 
 // move shortcut
 document.addEventListener("keydown", function(event) {
-	if (event.ctrlKey && event.altKey && event.key=="m"){
+	if (event.ctrlKey && event.altKey && (event.key=="m"||event.key=="d")){
 		move_button.click()
 	}
 });

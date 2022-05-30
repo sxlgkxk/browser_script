@@ -153,8 +153,12 @@
 			if (document.documentElement["scrollTop"] <=50 ) {
 				document.toggleAllNotesPanel()
 			} else {
-				document.showPanel()
-				panel.focus()
+				note_panel = document.querySelector("textarea.notePanel");
+				if (note_panel.hidden){
+					document.showPanel()
+					panel.focus()
+				}else
+					document.hidePanel()
 			}
 		} else if (event.key == "Escape") {
 			document.hidePanel()
