@@ -98,14 +98,15 @@
 		panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			text = panel.value;
-			localStorage.setItem("note_" + location.pathname, text)
+			let name=text.match(/^main/) ? '/Main_Page' : location.pathname;
+			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
 	}
-	document.showPanel = () => {
+	document.showPanel = (name=location.pathname) => {
 		panel = document.querySelector("textarea.notePanel");
 		if (panel.hidden) {
-			text = localStorage.getItem("note_" + location.pathname)
+			text = localStorage.getItem("note_" + name)
 			panel.value = text;
 			panel.hidden = false
 		}
@@ -149,7 +150,14 @@
 	// C-A-e / Esc
 	document.addEventListener("keydown", function (event) {
 		panel = document.querySelector("textarea.notePanel");
-		if (event.ctrlKey && event.altKey && event.key == "e") {
+		if (event.ctrlKey && event.altKey && event.key == "a") {
+			note_panel = document.querySelector("textarea.notePanel");
+			if (note_panel.hidden){
+				document.showPanel('/Main_Page')
+				panel.focus()
+			}else
+				document.hidePanel()
+		}else if (event.ctrlKey && event.altKey && event.key == "e") {
 			if (document.documentElement["scrollTop"] <=50 ) {
 				document.toggleAllNotesPanel()
 			} else {
