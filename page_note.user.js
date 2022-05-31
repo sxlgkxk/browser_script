@@ -104,7 +104,7 @@
 		if (!panel.hidden) {
 			let text = panel.value;
 			let name=text.match(/^note([0-9])/)
-			name=name? name[1] : location.pathname
+			name=name? '/'+name[1] : location.pathname
 			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
@@ -159,7 +159,7 @@
 		if (event.ctrlKey && event.altKey && event.key.match(/[0-9]/)) {
 			let note_panel = document.querySelector("textarea.notePanel");
 			if (note_panel.hidden){
-				document.showPanel(event.key)
+				document.showPanel('/'+event.key)
 				panel.focus()
 			}else
 				document.hidePanel()
