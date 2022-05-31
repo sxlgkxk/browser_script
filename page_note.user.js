@@ -12,6 +12,7 @@
 // @license      MIT
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @require 	 https://cdn.jsdelivr.net/npm/marked/marked.min.js
 // ==/UserScript==
 
 (function () {
@@ -25,6 +26,7 @@
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
+	addScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
 
 	function addStyle(html) {
 		let style = document.createElement("div")
@@ -115,7 +117,7 @@
 					let note = localStorage.getItem(key)
 					if (!note)
 						continue
-					html += `<a href="` + url.href + `" style="color: #8bdb81; font-weight: bold">` + url.pathname + `</a><pre>` + note + `</pre><hr>`
+					html += `<a href="` + url.href + `" style="color: #8bdb81; font-weight: bold">` + url.pathname + `</a><pre>` + marked.parse(note) + `</pre><hr>`
 				}
 			}
 			let noteList = document.querySelector("#allNotes")
