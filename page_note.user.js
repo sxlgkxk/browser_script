@@ -12,7 +12,6 @@
 // @license      MIT
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @require 	 https://cdn.jsdelivr.net/npm/marked/marked.min.js
 // ==/UserScript==
 
 (function () {
