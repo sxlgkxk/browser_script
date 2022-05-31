@@ -91,7 +91,7 @@
 		let panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			let text = panel.value;
-			let name=text.match(/^main/) ? '/Main_Page' : location.pathname;
+			let name=text.match(/^main/) ? '/' : location.pathname;
 			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
@@ -146,7 +146,7 @@
 		if (event.ctrlKey && event.altKey && event.key == "a") {
 			let note_panel = document.querySelector("textarea.notePanel");
 			if (note_panel.hidden){
-				document.showPanel('/Main_Page')
+				document.showPanel('/')
 				panel.focus()
 			}else
 				document.hidePanel()
