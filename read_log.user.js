@@ -18,17 +18,17 @@
 
 (function () {
 
-	blockWidth = 10
-	blockPadding = 3
+	let blockWidth = 10
+	let blockPadding = 3
 	// weeksCount=53
-	weeksCount = 30 // 393, 94
-	canvasWidth = (blockWidth + blockPadding) * weeksCount + blockPadding
-	canvasHeight = (blockWidth + blockPadding) * 7 + blockPadding
+	let weeksCount = 30 // 393, 94
+	let canvasWidth = (blockWidth + blockPadding) * weeksCount + blockPadding
+	let canvasHeight = (blockWidth + blockPadding) * 7 + blockPadding
 
 	//-------------------------------- common functions --------------------------------
 
 	function addScript(src) {
-		var scripts_dom = document.createElement('script');
+		let scripts_dom = document.createElement('script');
 		scripts_dom.src = src;
 		scripts_dom.type = 'text/javascript';
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
@@ -36,7 +36,7 @@
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
 
 	function getScrollPercent() {
-		var h = document.documentElement,
+		let h = document.documentElement,
 			b = document.body,
 			st = 'scrollTop',
 			sh = 'scrollHeight';
@@ -44,7 +44,7 @@
 	}
 
 	function getGistToken() {
-		gist_token = localStorage.getItem('gist_token')
+		let gist_token = localStorage.getItem('gist_token')
 		if (gist_token != null && gist_token.length > 10) {
 			gist_token = prompt('gist_token?')
 			if (gist_token) {
@@ -56,22 +56,22 @@
 
 	async function gist_get_async(gist_id, filename) {
 		// gist_get_async("cfa70a44bb181edbb2be19dacbcf6808", "read_log.json").then((content)=>{console.log(content)})
-		response = await axios.get("https://api.github.com/gists/" + gist_id)
-		data = response.data
-		content = data.files[filename].content
+		let response = await axios.get("https://api.github.com/gists/" + gist_id)
+		let data = response.data
+		let content = data.files[filename].content
 		return content
 	}
 
 	async function gist_set_async(gist_id, filename, content) {
 		// gist_set_async("cfa70a44bb181edbb2be19dacbcf6808", "read_log.json", "[]").then((content)=>{console.log(content)})
-		files = {}
+		let files = {}
 		files[filename] = { "content": content }
-		gist_token = getGistToken()
+		let gist_token = getGistToken()
 		return await axios.patch("https://api.github.com/gists/" + gist_id, { files: files }, { headers: { Authorization: "token " + gist_token } })
 	}
 
 	function addStyle(html) {
-		style = document.createElement("div")
+		let style = document.createElement("div")
 		document.body.before(style)
 		style.innerHTML = `<style>` + html + `</style>`
 	}
@@ -114,7 +114,7 @@
 	}
 
 	function getColor(count) {
-		colors = [
+		let colors = [
 			"#161b22",
 			"#cef1dd",
 			"#9ee3bb",
@@ -124,7 +124,7 @@
 			"#2a8b53",
 			"#216d41"
 		]
-		max_count = 60 * 8
+		let max_count = 60 * 8
 		return colors[Math.ceil(Math.min(count / max_count, 1) * (colors.length - 1))]
 	}
 
@@ -134,7 +134,7 @@
 	}
 
 	function getRegularWeekday(date) {
-		weekday = date.getDay()
+		let weekday = date.getDay()
 		return weekday ? weekday : 7
 	}
 
@@ -143,35 +143,35 @@
 	}
 
 	function refreshHeatmap() {
-		log = localStorage.getItem('readlog')
+		let log = localStorage.getItem('readlog')
 		log = log ? JSON.parse(log) : {}
 
-		now = new Date();
-		now1 = new Date(now - getRegularWeekday(now) * 3600 * 24 * 1000)
+		let now = new Date();
+		let now1 = new Date(now - getRegularWeekday(now) * 3600 * 24 * 1000)
 
-		canvas = document.querySelector('canvas#heatmap')
-		ctx = canvas.getContext('2d');
+		let canvas = document.querySelector('canvas#heatmap')
+		let ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		for (i = 0; i < 365; i++) {
-			date = new Date(now - i * 3600 * 24 * 1000)
-			weekday = getRegularWeekday(date)
-			y = weekday
+		for (let i = 0; i < 365; i++) {
+			let date = new Date(now - i * 3600 * 24 * 1000)
+			let weekday = getRegularWeekday(date)
+			let y = weekday
 
-			date1 = new Date(date - getRegularWeekday(date) * 3600 * 24 * 1000)
-			x = weeksCount - (now1 - date1) / 1000 / 3600 / 24 / 7
+			let date1 = new Date(date - getRegularWeekday(date) * 3600 * 24 * 1000)
+			let x = weeksCount - (now1 - date1) / 1000 / 3600 / 24 / 7
 
-			dateStr = getDateStr(date)
-			uuid = getUuid()
-			data = log[dateStr]
-			count = data ? sum(Object.values(data)) : 0
+			let dateStr = getDateStr(date)
+			let uuid = getUuid()
+			let data = log[dateStr]
+			let count = data ? sum(Object.values(data)) : 0
 
 			setBlock(x, y, count, ctx)
 		}
 	}
 
 	function getUuid() {
-		uuid = localStorage.getItem('uuid')
+		let uuid = localStorage.getItem('uuid')
 		if (!uuid) {
 			uuid = String(Math.random()).substring(2, 4)
 			localStorage.setItem('uuid', uuid)
@@ -181,21 +181,21 @@
 
 	function getHistoryDateStr(date = null) {
 		date = new Date(date)
-		month = String(date.getMonth() + 1)
-		day = String(date.getDate())
+		let month = String(date.getMonth() + 1)
+		let day = String(date.getDate())
 		return month + "." + day
 	}
 
 	function getDateStr(date = null) {
 		date = date ? date : new Date()
-		year = String(date.getFullYear()).substring(2, 4)
-		month = String(date.getMonth() + 1).padStart(2, '0')
-		day = String(date.getDate()).padStart(2, '0')
+		let year = String(date.getFullYear()).substring(2, 4)
+		let month = String(date.getMonth() + 1).padStart(2, '0')
+		let day = String(date.getDate()).padStart(2, '0')
 		return year + month + day
 	}
 
 	function updateLocalLog(uuid, date) {
-		log = localStorage.getItem('readlog')
+		let log = localStorage.getItem('readlog')
 		log = log ? JSON.parse(log) : {}
 		if (!log[date]) log[date] = {}
 		if (!log[date][uuid]) log[date][uuid] = 0
@@ -204,15 +204,15 @@
 	}
 
 	function updateGist() {
-		gist_id = "cfa70a44bb181edbb2be19dacbcf6808"
-		filename = "read_log.json"
+		let gist_id = "cfa70a44bb181edbb2be19dacbcf6808"
+		let filename = "read_log.json"
 
-		log = localStorage.getItem('readlog')
+		let log = localStorage.getItem('readlog')
 		log = log ? JSON.parse(log) : {}
 
 		// pull
 		gist_get_async(gist_id, filename).then((content) => {
-			remoteLog = JSON.parse(content)
+			let remoteLog = JSON.parse(content)
 			for (let [date, data] of Object.entries(remoteLog)) {
 				if (!log[date]) {
 					log[date] = data;
@@ -287,16 +287,16 @@
 
 	function drawWpmCanvas(){
 		// console.log('draw')
-		canvas = document.querySelector("canvas#wpmCanvas")
-		ctx = canvas.getContext('2d');
+		let canvas = document.querySelector("canvas#wpmCanvas")
+		let ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		// lines
 		ctx.beginPath();
 		ctx.moveTo(50,50-50*Math.min(wpmQueue[wpmQueue.length-1]/500, 1));
 		for(let i=wpmQueue.length-1;i>=0;i--){
-			y=50*Math.min(wpmQueue[i]/500,1);
-			x=50-(wpmQueue.length-1-i)*5-5;
+			let y=50*Math.min(wpmQueue[i]/500,1);
+			let x=50-(wpmQueue.length-1-i)*5-5;
 			ctx.lineTo(x, 50-y);
 			// console.log(x, y)
 		}
@@ -321,11 +321,11 @@
 	
 	let lastStartTime=new Date().getTime()
 	function updateWpmArea(){
-		_lineStart=parseInt(wpmArea.style.top.replace("px",""))
-		_lineEnd=_lineStart+parseInt(wpmArea.style.height.replace("px",""))
+		let _lineStart=parseInt(wpmArea.style.top.replace("px",""))
+		let _lineEnd=_lineStart+parseInt(wpmArea.style.height.replace("px",""))
 
-		lineEnd=document.documentElement["scrollTop"]+window.innerHeight*0.2
-		lineStart=Math.min(_lineEnd, lineEnd)-1;
+		let lineEnd=document.documentElement["scrollTop"]+window.innerHeight*0.2
+		let lineStart=Math.min(_lineEnd, lineEnd)-1;
 
 		// queue push
 		if(new Date().getTime()-lastStartTime>1000*60 || forceUpdateWpmArea){
@@ -336,7 +336,7 @@
 		}
 		wpmArea.style.height=(lineEnd-_lineStart)+"px"
 
-		words_cnt=countWords(_lineStart, lineEnd)
+		let words_cnt=countWords(_lineStart, lineEnd)
 		// console.log(_lineStart, lineEnd, words_cnt)
 		wpmQueue[wpmQueue.length-1]=Math.round(words_cnt/((new Date().getTime()-lastStartTime)/1000/60))
 		// drawWpmCanvas()
@@ -379,14 +379,14 @@
 		}
 		return Math.round(words_cnt)
 	}
-	cnt=countWords(0, 100000)
+	let cnt=countWords(0, 100000)
 	console.log(cnt)
 
 	//-------------------------------- history --------------------------------
 
-	chapter_dom = document.querySelector("div.chapter-detail")
+	let chapter_dom = document.querySelector("div.chapter-detail")
 	if (!chapter_dom) chapter_dom = document.body
-	history_panel = document.createElement("div")
+	let history_panel = document.createElement("div")
 	chapter_dom.before(history_panel)
 	history_panel.innerHTML = `<div>
 	<table id="history_table">
@@ -397,23 +397,23 @@
 	<button id="history_go" class="pagiBtn">go</button>
 </div>`
 
-	history_data = localStorage.getItem('history_data')
+	let history_data = localStorage.getItem('history_data')
 	history_data = history_data ? JSON.parse(history_data) : {}
 	history_data[location.href] = { date: new Date().getTime(), title: document.title.replace(" - Wikipedia", ''), url: location.href }
 	localStorage.setItem('history_data', JSON.stringify(history_data))
-	history_list = Object.values(history_data).sort((a, b) => { return b.date - a.date })
+	let history_list = Object.values(history_data).sort((a, b) => { return b.date - a.date })
 
 	function setHistoryTable(page) {
 		page = page ? page : 1
-		history_pageSize = 10
-		history_table = document.querySelector("#history_table")
+		let history_pageSize = 10
+		let history_table = document.querySelector("#history_table")
 		history_table.innerHTML = ""
 
-		start = (page - 1) * history_pageSize
-		end = Math.min(start + history_pageSize, history_list.length)
+		let start = (page - 1) * history_pageSize
+		let end = Math.min(start + history_pageSize, history_list.length)
 
-		for (i = start; i < end; i++) {
-			day = new Date(history_list[i].date).getDate()
+		for (let i = start; i < end; i++) {
+			let day = new Date(history_list[i].date).getDate()
 			history_table.innerHTML += `<tr>
 			<td class="historyDay`+ day + `">` + getHistoryDateStr(history_list[i].date) + `</td>
 			<td><a href="`+ history_list[i].url + `">` + history_list[i].title + `</a></td>
@@ -423,18 +423,18 @@
 	setHistoryTable(1)
 
 	document.querySelector('#history_prev').onclick = () => {
-		history_page = document.querySelector('#history_input').value;
+		let history_page = document.querySelector('#history_input').value;
 		setHistoryTable(--history_page);
 		document.querySelector('#history_input').value = history_page
 	}
 	document.querySelector('#history_next').onclick = () => {
-		history_page = document.querySelector('#history_input').value;
+		let history_page = document.querySelector('#history_input').value;
 		setHistoryTable(++history_page);
 		document.querySelector('#history_input').value = history_page
 	}
 
 	document.querySelector('#history_go').onclick = () => {
-		history_page = document.querySelector('#history_input').value;
+		let history_page = document.querySelector('#history_input').value;
 		setHistoryTable(history_page);
 	}
 

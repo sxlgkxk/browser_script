@@ -19,7 +19,7 @@
 	//-------------------------------- common functions --------------------------------
 
 	function addScript(src) {
-		var scripts_dom = document.createElement('script');
+		let scripts_dom = document.createElement('script');
 		scripts_dom.src = src;
 		scripts_dom.type = 'text/javascript';
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
@@ -27,7 +27,7 @@
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
 
 	function addStyle(html) {
-		style = document.createElement("div")
+		let style = document.createElement("div")
 		document.body.before(style)
 		style.innerHTML = `<style>` + html + `</style>`
 	}
@@ -35,20 +35,13 @@
 	//-------------------------------- code snippets --------------------------------
 
 	// dom insert
-	note_dom = document.createElement('div')
+	let note_dom = document.createElement('div')
 	document.body.before(note_dom)
 	note_dom.innerHTML = `
 		<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
 		<textarea class="notePanel" hidden></textarea>
 		<div id="all_notes_panel" hidden>
 			<div id="allNotes"></div>
-			<table id="history_table">
-			</table>
-			<button id="note_history_prev" class="pagiBtn">\<</button>
-			<button id="note_history_next" class="pagiBtn">\></button>
-			<input id="note_history_input" type="text" value="1" size="3">
-			<button id="note_history_go" class="pagiBtn">go</button>
-			<button id="booksNoteUpdateBtn" class="pagiBtn" onclick="document.toggleNotePanle()">update</button>
 		</div>`
 
 	addStyle(`
@@ -95,37 +88,37 @@
 
 	// hide/show functions
 	document.hidePanel = () => {
-		panel = document.querySelector("textarea.notePanel");
+		let panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
-			text = panel.value;
+			let text = panel.value;
 			let name=text.match(/^main/) ? '/Main_Page' : location.pathname;
 			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
 	}
 	document.showPanel = (name=location.pathname) => {
-		panel = document.querySelector("textarea.notePanel");
+		let panel = document.querySelector("textarea.notePanel");
 		if (panel.hidden) {
-			text = localStorage.getItem("note_" + name)
+			let text = localStorage.getItem("note_" + name)
 			panel.value = text;
 			panel.hidden = false
 		}
 	}
 	document.toggleAllNotesPanel = () => {
-		all_notes_panel = document.querySelector("#all_notes_panel");
+		let all_notes_panel = document.querySelector("#all_notes_panel");
 		if (all_notes_panel.hidden) {
-			html = ``
+			let html = ``
 			for (i = 0; i < localStorage.length; i++) {
-				key = localStorage.key(i)
-				if (key.substr(0, 5) == "note_") {
-					url = new URL(location.origin+key.substring(5))
-					note = localStorage.getItem(key)
+				let key = localStorage.key(i)
+				if (key.substring(0, 5) == "note_") {
+					let url = new URL(location.origin+key.substring(5))
+					let note = localStorage.getItem(key)
 					if (!note)
 						continue
 					html += `<a href="` + url.href + `" style="color: #8bdb81; font-weight: bold">` + url.pathname + `</a><pre>` + note + `</pre><hr>`
 				}
 			}
-			noteList = document.querySelector("#allNotes")
+			let noteList = document.querySelector("#allNotes")
 			noteList.innerHTML = html
 			all_notes_panel.hidden = false
 		} else {
@@ -139,7 +132,7 @@
 			document.toggleAllNotesPanel()
 		} else {
 			// notePanel
-			note_panel = document.querySelector("textarea.notePanel");
+			let note_panel = document.querySelector("textarea.notePanel");
 			if (note_panel.hidden)
 				document.showPanel()
 			else
@@ -149,9 +142,9 @@
 
 	// C-A-e / Esc
 	document.addEventListener("keydown", function (event) {
-		panel = document.querySelector("textarea.notePanel");
+		let panel = document.querySelector("textarea.notePanel");
 		if (event.ctrlKey && event.altKey && event.key == "a") {
-			note_panel = document.querySelector("textarea.notePanel");
+			let note_panel = document.querySelector("textarea.notePanel");
 			if (note_panel.hidden){
 				document.showPanel('/Main_Page')
 				panel.focus()
@@ -161,7 +154,7 @@
 			if (document.documentElement["scrollTop"] <=50 ) {
 				document.toggleAllNotesPanel()
 			} else {
-				note_panel = document.querySelector("textarea.notePanel");
+				let note_panel = document.querySelector("textarea.notePanel");
 				if (note_panel.hidden){
 					document.showPanel()
 					panel.focus()
