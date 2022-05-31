@@ -32,6 +32,18 @@
 		document.body.before(style)
 		style.innerHTML = `<style>` + html + `</style>`
 	}
+	function isInViewport(selector) {
+		const rect = document.querySelector(selector).getBoundingClientRect();
+		// return (
+		// 	rect.top >= 0 &&
+		// 	rect.left >= 0 &&
+		// 	rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+		// 	rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+		// );
+		if (document.querySelector(selector).hidden)
+			return document.documentElement["scrollTop"] <=50 
+		return (rect.bottom >0);
+	}
 
 	//-------------------------------- code snippets --------------------------------
 
@@ -164,7 +176,7 @@
 			}else
 				document.hidePanel()
 		}else if (event.ctrlKey && event.altKey && event.key == "e") {
-			if (document.documentElement["scrollTop"] <=50 ) {
+			if (isInViewport('#all_notes_panel')) {
 				document.toggleAllNotesPanel()
 			} else {
 				let note_panel = document.querySelector("textarea.notePanel");
