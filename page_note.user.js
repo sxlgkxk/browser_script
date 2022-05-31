@@ -103,7 +103,8 @@
 		let panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			let text = panel.value;
-			let name=text.match(/^main/) ? '/' : location.pathname;
+			let name=text.match(/^note([0-9])/)
+			name=name? name[1] : location.pathname
 			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
@@ -155,10 +156,10 @@
 	// C-A-e / Esc
 	document.addEventListener("keydown", function (event) {
 		let panel = document.querySelector("textarea.notePanel");
-		if (event.ctrlKey && event.altKey && event.key == "a") {
+		if (event.ctrlKey && event.altKey && event.key.match(/[0-9]/)) {
 			let note_panel = document.querySelector("textarea.notePanel");
 			if (note_panel.hidden){
-				document.showPanel('/')
+				document.showPanel(event.key)
 				panel.focus()
 			}else
 				document.hidePanel()
