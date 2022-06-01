@@ -61,14 +61,6 @@
 		strong{
 			color: #37a2da
 		}
-		code{
-			color:#ff0080;
-			background: none;
-			font-weight: bold;
-		}
-		ul, li{
-			line-height: 1;
-		}
 		button.noteBtn {
 			font-weight: bold;
 			color: #fff;
