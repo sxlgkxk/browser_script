@@ -48,8 +48,8 @@ function move() {
 					}, 1000*60)
 				}
 		}
-		requestAnimationFrame(move);
 	}
+	requestAnimationFrame(move);
 }
 move()
 
@@ -77,8 +77,13 @@ move_button.onclick=()=>{
 		localStorage.setItem("speed_factor", speed_factor)
 	}
 	is_move=!is_move;
+	if(!is_move)
+		setTimeout(()=>{
+			is_move=true;
+			localStorage.setItem('is_move', is_move);
+		}, 1000*30)
+
 	localStorage.setItem('is_move', is_move);
-	move()
 }
 
 // move shortcut
