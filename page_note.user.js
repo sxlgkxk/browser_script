@@ -4,7 +4,7 @@
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/page_note.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
-// @version      0.2
+// @version      0.3
 // @description  page note
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
@@ -158,6 +158,13 @@
 			if(name==location.pathname) opt.selected = true;
 			document.querySelector("select#pagenote_select").appendChild(opt);
 		}
+	}
+	if(document.querySelector("select#pagenote_select").value!=location.pathname){
+		let opt = document.createElement('option');
+		opt.value = location.pathname;
+		opt.innerHTML = location.pathname;
+		opt.selected = true;
+		document.querySelector("select#pagenote_select").appendChild(opt);
 	}
 
 	document.querySelector("select#pagenote_select").addEventListener("change", function (event) {
