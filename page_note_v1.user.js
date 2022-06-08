@@ -32,6 +32,12 @@
 		document.body.before(style)
 		style.innerHTML = `<style>` + html + `</style>`
 	}
+	function isInViewport(selector) {
+		const rect = document.querySelector(selector).getBoundingClientRect();
+		if (document.querySelector(selector).hidden)
+			return document.documentElement["scrollTop"] <=50 
+		return (rect.bottom >0);
+	}
 
 	//-------------------------------- code snippets --------------------------------
 
@@ -41,13 +47,9 @@
 	note_dom.innerHTML = `
 		<button class="noteBtn" onclick="document.toggleNotePanle()">note</button>
 		<textarea class="notePanel" hidden></textarea>
-		<select id="pagenote_select">
-		</select>
-		<div id="pagenote_panel">
-			<textarea id="pagenote_textarea">hi</textarea>
+		<div id="all_notes_panel" hidden>
+			<div id="allNotes"></div>
 		</div>`
-	let text = localStorage.getItem(`note_${location.pathname}`)
-	document.querySelector("textarea#pagenote_textarea").value = text;
 
 	addStyle(`
 		strong{
@@ -65,6 +67,18 @@
 			opacity: 0.8;
 			z-index: 3000;
 		}
+		div#all_notes_panel pre{
+			color: #ddd;
+		}
+		div#all_notes_panel{
+			color: #ddd;
+			background-color: #333;
+			padding-top: 42px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 10px;
+			z-index: 3000;
+		}
 		textarea.notePanel{
 			font-weight: bold;
 			color: #fff;
@@ -78,21 +92,8 @@
 			z-index: 3000;
 			padding: 30px;
 		}
-		textarea#pagenote_textarea{
-			color: #fff;
-			background-color: #333;
-			padding: 20px;
-			width: 100%;
-			height: 400px;
-		}
-		select#pagenote_select{
-			color: #fff;
-			background-color: #666;
-			width: 100%;
-			padding: 10px;
-			margin-bottom: 10px;
-		}
 		[hidden] { display: none !important; }
+		//div#mw-head, div#mw-panel{display: none !important;}
 	`)
 
 	// hide/show functions
@@ -100,12 +101,13 @@
 		let panel = document.querySelector("textarea.notePanel");
 		if (!panel.hidden) {
 			let text = panel.value;
-			localStorage.setItem(`note_${location.pathname}`, text)
-			document.querySelector("textarea#pagenote_textarea").value = text;
+			let name=text.match(/^note([0-9])/)
+			name=name? '/'+name[1] : location.pathname
+			localStorage.setItem("note_" + name, text)
 			panel.hidden = true
 		}
 	}
-	document.showPanel = (name = location.pathname) => {
+	document.showPanel = (name=location.pathname) => {
 		let panel = document.querySelector("textarea.notePanel");
 		if (panel.hidden) {
 			let text = localStorage.getItem("note_" + name)
@@ -113,57 +115,67 @@
 			panel.hidden = false
 		}
 	}
+	document.toggleAllNotesPanel = () => {
+		let all_notes_panel = document.querySelector("#all_notes_panel");
+		if (all_notes_panel.hidden) {
+			let html = ``
+			for (i = 0; i < localStorage.length; i++) {
+				let key = localStorage.key(i)
+				if (key.substring(0, 5) == "note_") {
+					let url = new URL(location.origin+key.substring(5))
+					let note = localStorage.getItem(key)
+					if (!note)
+						continue
+					html += `<a href="` + url.href + `" style="color: #8bdb81; font-weight: bold">` + url.pathname + `</a><pre>` + marked.parse(note) + `</pre><hr>`
+				}
+			}
+			let noteList = document.querySelector("#allNotes")
+			noteList.innerHTML = html
+			all_notes_panel.hidden = false
+		} else {
+			all_notes_panel.hidden = true
+		}
+	}
 	document.toggleNotePanle = () => {
-		let note_panel = document.querySelector("textarea.notePanel");
-		if (note_panel.hidden)
-			document.showPanel()
-		else
-			document.hidePanel()
+		// all_notes_panel
+		// if (document.documentElement["scrollTop"] == 0 && ! (window.innerHeight + window.scrollY) >= document.body.scrollHeight){
+		if (document.documentElement["scrollTop"] <= 50){
+			document.toggleAllNotesPanel()
+		} else {
+			// notePanel
+			let note_panel = document.querySelector("textarea.notePanel");
+			if (note_panel.hidden)
+				document.showPanel()
+			else
+				document.hidePanel()
+		}
 	}
 
 	// C-A-e / Esc
 	document.addEventListener("keydown", function (event) {
 		let panel = document.querySelector("textarea.notePanel");
-		if (event.ctrlKey && event.altKey && event.key == "e") {
+		if (event.ctrlKey && event.altKey && event.key.match(/[0-9]/)) {
 			let note_panel = document.querySelector("textarea.notePanel");
-			if (note_panel.hidden) {
-				document.showPanel()
+			if (note_panel.hidden){
+				document.showPanel('/'+event.key)
 				panel.focus()
-			} else
+			}else
 				document.hidePanel()
+		}else if (event.ctrlKey && event.altKey && event.key == "e") {
+			if (isInViewport('#all_notes_panel')) {
+				document.toggleAllNotesPanel()
+			} else {
+				let note_panel = document.querySelector("textarea.notePanel");
+				if (note_panel.hidden){
+					document.showPanel()
+					panel.focus()
+				}else
+					document.hidePanel()
+			}
 		} else if (event.key == "Escape") {
 			document.hidePanel()
 			panel.blur()
 		}
 	});
-
-	// pagenote_panel
-	document.querySelector("textarea#pagenote_textarea").addEventListener("input", function (event) {
-		let text = this.value;
-		localStorage.setItem(`note_${location.pathname}`, text)
-	})
-
-	// pagenote_select
-	for (let i = 0; i < localStorage.length; i++) {
-		let key = localStorage.key(i)
-		if (key.substring(0, 5) == "note_") {
-			let name=key.substring(5);
-			let url = new URL(location.origin + key.substring(5))
-			let note = localStorage.getItem(key)
-			if (!note) continue
-
-			let opt = document.createElement('option');
-			opt.value = name;
-			opt.innerHTML = name;
-			if(name==location.pathname) opt.selected = true;
-			document.querySelector("select#pagenote_select").appendChild(opt);
-		}
-	}
-
-	document.querySelector("select#pagenote_select").addEventListener("change", function (event) {
-		let name = this.value;
-		let url = `${name}`
-		window.open(url, '_blank').focus();
-	})
 
 })();
