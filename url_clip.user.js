@@ -33,7 +33,6 @@
 		dom.innerHTML+=`<span>{%endurl%}</span>
 			<style>
 				#url-hexo-container {
-					width: 100%;
 					text-align: center;
 					background-color: #ddd;
 					color: #000;
