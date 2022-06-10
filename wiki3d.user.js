@@ -22,14 +22,34 @@
 
 	//-------------------------------- common functions --------------------------------
 
-	function addScript(src) {
+	function addScript(src, content='', type='') {
 		let scripts_dom = document.createElement('script');
-		scripts_dom.src = src;
-		scripts_dom.type = 'text/javascript';
+		if(type){
+			scripts_dom.type = type;
+			scripts_dom.textContent = content;
+		}else if(!src && content){
+			scripts_dom.type = 'module';
+			scripts_dom.textContent = content;
+		}else{
+			scripts_dom.src = src;
+			scripts_dom.type = 'text/javascript';
+		}
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
 	addScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
+	addScript('', `
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/gh/mrdoob/three.js/build/three.module.js"
+			}
+		}
+	`, "importmap")
+	addScript('', `
+		console.log('wiki3d')
+		import { PointerLockControls } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/controls/PointerLockControls.js';
+		console.log(PointerLockControls);
+	`)
 
 	function addStyle(html) {
 		let style = document.createElement("div")
@@ -42,10 +62,10 @@
 	// dom insert
 	let three_dom = document.createElement('div')
 	document.body.before(three_dom)
-	three_dom.innerHTML = `
-		<div id="three_panel">
-			<img src="https://sxlgkxk.github.io/im/3d_text_walls.jpg" id="threePlaceholder">
-		</div>`
+	// three_dom.innerHTML = `
+	// 	<div id="three_panel">
+	// 		<img src="https://sxlgkxk.github.io/im/3d_text_walls.jpg" id="threePlaceholder">
+	// 	</div>`
 
 	addStyle(`
 		img#threePlaceholder{
