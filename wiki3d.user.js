@@ -24,14 +24,23 @@
 
 	//-------------------------------- common functions --------------------------------
 
-	function addScript(src) {
+	function addScript(src, content='') {
 		let scripts_dom = document.createElement('script');
-		scripts_dom.src = src;
-		scripts_dom.type = src.match(/module/) ? 'module' : 'text/javascript';
+		if (content){
+			scripts_dom.textContent = content;
+			scripts_dom.type = 'module';
+		} else {
+			scripts_dom.src = src;
+			scripts_dom.type = 'text/javascript';
+		}
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
 	addScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
+	addScript('', `
+		import { init } from 'http://127.0.0.1:4000/cdn/3d/mc/10-pics.js';
+		init("threePlaceholder", ``);
+	`)
 
 
 	function addStyle(html) {
@@ -45,10 +54,10 @@
 	// dom insert
 	let three_dom = document.createElement('div')
 	document.body.before(three_dom)
-	three_dom.innerHTML = `
-		<div id="three_panel">
-			<img src="https://sxlgkxk.github.io/im/3d_text_walls.jpg" id="threePlaceholder">
-		</div>`
+	// three_dom.innerHTML = `
+	// 	<div id="three_panel">
+	// 		<img src="https://sxlgkxk.github.io/im/3d_text_walls.jpg" id="threePlaceholder">
+	// 	</div>`
 
 	addStyle(`
 		img#threePlaceholder{
