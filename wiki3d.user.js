@@ -19,6 +19,10 @@
 // @require 	https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 // ==/UserScript==
 
+/*
+	1. 代码功能: wiki内容的3d化
+
+*/
 
 (function () {
 
@@ -37,11 +41,6 @@
 	}
 	addScript('https://unpkg.com/axios/dist/axios.min.js')
 	addScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
-	addScript('', `
-		import { init } from 'http://127.0.0.1:4000/cdn/3d/mc/10-pics.js';
-		init("threePlaceholder", ``);
-	`)
-
 
 	function addStyle(html) {
 		let style = document.createElement("div")
@@ -51,25 +50,56 @@
 
 	//-------------------------------- code snippets --------------------------------
 
+	//-------------------------------- main --------------------------------
+
+	let doms=document.querySelector('#bodyContent').querySelectorAll('a')
+	let urlSet=new Set()
+	for(let dom of doms){
+		let url=dom.href
+		if(url.match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki/)){
+			if(url.match(/^https:\/\/en.(m\.)*wikipedia.org\/wiki\/.*?([:\(#]|Main_Page|undefined)+.*?/))
+				continue
+			if(url == location.href)
+				continue
+			urlSet.add(url)
+		}
+	}
+	let urls=Array.from(urlSet)
+	// urls=urls.sort(()=>Math.random()-0.5)
+	let content=``;
+	for(let url of urls){
+		let name=new URL(url).pathname
+		content+=`${name}\n`
+	}
+
+	//-------------------------------- wrap up --------------------------------
+
+	// three.js
+	let scripts_dom = document.createElement('script');
+	scripts_dom.textContent =`{
+		"imports": {
+			"three": "https://unpkg.com/three/build/three.module.js"
+		}
+	}`;
+	scripts_dom.type = 'importmap';
+	document.getElementsByTagName('head')[0].appendChild(scripts_dom);
+
 	// dom insert
 	let three_dom = document.createElement('div')
 	document.body.before(three_dom)
-	// three_dom.innerHTML = `
-	// 	<div id="three_panel">
-	// 		<img src="https://sxlgkxk.github.io/im/3d_text_walls.jpg" id="threePlaceholder">
-	// 	</div>`
+	three_dom.id='three_panel'
 
-	addStyle(`
-		img#threePlaceholder{
-			width: 800px;
-			margin-left:auto;
-			margin-right:auto;
-			display:block;
-			margin-top: 10px;
-			margin-bottom: 10px;
-		}
+	addScript('', `
+		// import { wikiInit } from 'https://sxlgkxk.github.io/cdn/3d/mc/mc.js';
+		import { wikiInit } from 'http://127.0.0.1:4000/cdn/3d/mc/mc.js';
+		wikiInit("three_panel", \`${content}\`);
 	`)
-
+	addStyle(`
+		#three_panel {
+			margin-bottom: 10px;
+			margin-top: 10px;
+		}
+	`) 
 
 
 })();
