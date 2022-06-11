@@ -13,10 +13,6 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_xmlhttpRequest
-// @require		https://threejs.org/build/three.js
-// @require		https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/libs/lil-gui.module.min.js
-// @require 	https://cdn.jsdelivr.net/npm/lil-gui@0.16
-// @require 	https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 // ==/UserScript==
 
 /*
