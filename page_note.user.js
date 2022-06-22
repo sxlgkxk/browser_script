@@ -142,6 +142,10 @@
 		let text = this.value;
 		localStorage.setItem(`note_${location.pathname}`, text)
 	})
+	document.querySelector("textarea.notePanel").addEventListener("input", function (event) {
+		let text = this.value;
+		localStorage.setItem(`note_${location.pathname}`, text)
+	})
 
 	// pagenote_select
 	for (let i = 0; i < localStorage.length; i++) {
