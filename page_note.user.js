@@ -12,6 +12,7 @@
 // @license      MIT
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @require 	 https://unpkg.com/axios/dist/axios.min.js
 // ==/UserScript==
 
 (function () {
@@ -24,7 +25,6 @@
 		scripts_dom.type = 'text/javascript';
 		document.getElementsByTagName('head')[0].appendChild(scripts_dom);
 	}
-	addScript('https://unpkg.com/axios/dist/axios.min.js')
 	addScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
 
 	function addStyle(html) {
@@ -34,6 +34,40 @@
 	}
 
 	//-------------------------------- code snippets --------------------------------
+
+	if(location.pathname=='/wiki/Main_Page'){
+		let password = "123zxccos"
+		function mainpage_pull() {
+			axios.get(`https://service-dekuoyfq-1259633509.usw.apigw.tencentcs.com/fileSync?password=${password}&path=wiki.md`).then(res => {
+				let data = res.data
+				let content = data['Data'];
+				if (content) {
+					localStorage.setItem(`note_${location.pathname}`, content)
+					location.reload();
+				}
+			});
+		}
+		document.mainpage_pull = mainpage_pull
+
+		function mainpage_push() {
+			let data=localStorage.getItem(`note_${location.pathname}`, content)
+			axios.post(`https://service-dekuoyfq-1259633509.usw.apigw.tencentcs.com/fileSync?password=${password}&path=wiki.md`, {Data: data}).then(res => {
+				let data = res.data
+				alert("push success")
+			});
+		}
+		document.mainpage_push = mainpage_push
+
+		let dom=document.createElement('div')
+		dom.innerHTML=`
+			<button class="pagiBtn" onclick="document.mainpage_pull()">pull</button>
+			<button class="pagiBtn" onclick="document.mainpage_push()">push</button>
+		`
+		document.body.before(dom)
+		dom.id="mainpage"
+	}
+	
+
 
 	// dom insert
 	let note_dom = document.createElement('div')
@@ -142,12 +176,16 @@
 		let text = this.value;
 		localStorage.setItem(`note_${location.pathname}`, text)
 	})
+	document.querySelector("textarea.notePanel").addEventListener("input", function (event) {
+		let text = this.value;
+		localStorage.setItem(`note_${location.pathname}`, text)
+	})
 
 	// pagenote_select
 	for (let i = 0; i < localStorage.length; i++) {
 		let key = localStorage.key(i)
 		if (key.substring(0, 5) == "note_") {
-			let name=key.substring(5);
+			let name = key.substring(5);
 			let url = new URL(location.origin + key.substring(5))
 			let note = localStorage.getItem(key)
 			if (!note) continue
@@ -155,11 +193,11 @@
 			let opt = document.createElement('option');
 			opt.value = name;
 			opt.innerHTML = name;
-			if(name==location.pathname) opt.selected = true;
+			if (name == location.pathname) opt.selected = true;
 			document.querySelector("select#pagenote_select").appendChild(opt);
 		}
 	}
-	if(document.querySelector("select#pagenote_select").value!=location.pathname){
+	if (document.querySelector("select#pagenote_select").value != location.pathname) {
 		let opt = document.createElement('option');
 		opt.value = location.pathname;
 		opt.innerHTML = location.pathname;
