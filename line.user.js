@@ -42,7 +42,7 @@
 			position: fixed;
 			right: 10px;
 			width: 50px;
-			bottom: 10px;
+			top: ${document.documentElement["scrollTop"]+window.innerHeight*0.5-25+'px'};
 			height: 50px;
 			z-index: 99999;
 		}
