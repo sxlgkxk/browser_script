@@ -4,7 +4,7 @@
 // @updateURL    https://github.com/sxlgkxk/browser_script/raw/main/line.user.js
 // @downloadURL  https://github.com/sxlgkxk/browser_script/raw/main/line.user.js
 // @supportURL   https://github.com/sxlgkxk/browser_script/issues
-// @version      0.1
+// @version      0.2
 // @description  add line
 // @namespace    http://sxlgkxk.github.io/
 // @author       sxlgkxk
@@ -64,7 +64,7 @@
 		line_dom.style.left = '0'
 		line_dom.style.width = '100%'
 		line_dom.style.height= '3px'
-		line_dom.style.backgroundColor = 'rgba(154, 208, 236, 0.5)'
+		line_dom.style.backgroundColor = '#f00'
 		line_dom.style.zIndex = '999999'
 		console.log(line_dom)
 		document.body.appendChild(line_dom)
